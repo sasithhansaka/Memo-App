@@ -9,9 +9,16 @@ import SwiftUI
 
 @main
 struct Memo_app_IosApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self)
+    
+    var appDelegate
+    
+    @StateObject private var auth = AuthViewModel()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+//            ContentView()
+            RootView()
+              .environmentObject(auth)
         }
     }
 }

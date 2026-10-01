@@ -12,3 +12,5 @@ xcuserdata/
 
 # CocoaPods
 Pods/
+
+GoogleService-Info.plist
