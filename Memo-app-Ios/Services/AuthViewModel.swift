@@ -14,6 +14,7 @@ import Combine
 final class AuthViewModel: ObservableObject {
 
     @Published var user: FirebaseAuth.User?
+    @Published var fullName = ""
     @Published var isLoading = false
     @Published var errormessage = ""
 
@@ -25,7 +26,16 @@ final class AuthViewModel: ObservableObject {
         self.user = Auth.auth().currentUser
 
         Auth.auth().addStateDidChangeListener { [weak self] _, user in
-            self?.user = user
+            Task { @MainActor in
+
+                self?.user = user
+
+                if user != nil {
+                    await self?.loadUserProfile()
+                } else {
+                    self?.fullName = ""
+                }
+            }
         }
     }
 
@@ -156,6 +166,35 @@ final class AuthViewModel: ObservableObject {
             errormessage = firebaseErrorMessage(error)
         }
     }
+    
+    func loadUserProfile() async {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+
+
+        do {
+
+            let document = try await db
+                .collection("users")
+                .document(uid)
+                .getDocument()
+
+
+            guard let data = document.data() else {
+                return
+            }
+
+
+            fullName = data["fullName"] as? String ?? ""
+
+        } catch {
+            print(
+                "Failed to load user profile:",
+                error.localizedDescription
+        )
+        }
+    }
 
     func logout() {
 
@@ -164,6 +203,7 @@ final class AuthViewModel: ObservableObject {
             try Auth.auth().signOut()
 
             user = nil
+            fullName=""
 
         } catch {
 

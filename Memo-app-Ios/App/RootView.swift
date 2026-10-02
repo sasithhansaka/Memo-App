@@ -17,7 +17,7 @@ struct RootView: View {
     var body: some View {
         Group{
             if auth.user != nil {
-                HomeView()
+                MainTabView()
             }
             else{
                 LoginView()
