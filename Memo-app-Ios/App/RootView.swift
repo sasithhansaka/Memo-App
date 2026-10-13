@@ -7,28 +7,28 @@
 
 
 import SwiftUI
-
+import Foundation
 
 struct RootView: View {
-    
-    @EnvironmentObject var  auth : AuthViewModel
-    
-    
+
+    @EnvironmentObject var auth: AuthViewModel
+    @EnvironmentObject var appLock: AppLockManager
+
     var body: some View {
-        Group{
-            if auth.user != nil {
-                MainTabView()
+            Group {
+                if auth.user == nil {
+                    LoginView()
+                } else if appLock.isLocked {
+                    AppLockView()
+                } else {
+                    MainTabView()
+                }
             }
-            else{
-                LoginView()
-            }
-        }
-        
-        
     }
 }
 
-#Preview{
+#Preview {
     RootView()
         .environmentObject(AuthViewModel())
+        .environmentObject(AppLockManager.shared)
 }

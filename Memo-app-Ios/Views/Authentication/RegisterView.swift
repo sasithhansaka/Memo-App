@@ -30,28 +30,28 @@ struct RegisterView: View {
                                         
                     VStack(spacing: 0) {
                         
-                        Image("MemoMapLogo")
+                        Image("LOGO")
                             .resizable()
                             .scaledToFit()
                             .frame(
-                                width: 100,
-                                height: 100
+                                width: 150,
+                                height: 150
                             )
                         
-                        Text("MEMOMAP")
-                            .font(
-                                .system(
-                                    size: 8,
-                                    weight: .medium
-                                )
-                            )
-                            .foregroundStyle(
-                                MemoMapTheme.green
-                            )
-                            .padding(.top, -1)
+//                        Text("MEMOMAP")
+//                            .font(
+//                                .system(
+//                                    size: 8,
+//                                    weight: .medium
+//                                )
+//                            )
+//                            .foregroundStyle(
+//                                MemoMapTheme.green
+//                            )
+//                            .padding(.top, -1)
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.top, 47)
+                    .padding(.top, 20)
                     
                                         
                     VStack(
@@ -60,23 +60,14 @@ struct RegisterView: View {
                     ) {
                         
                         Text("Create your account")
-                            .font(
-                                .system(
-                                    size: 22,
-                                    weight: .bold
-                                )
-                            )
-                            .foregroundStyle(
-                                MemoMapTheme.black
-                            )
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundStyle(MemoMapTheme.black)
                         
                         Text(
                             "Start collecting memories that matter."
                         )
-                        .font(.system(size: 10))
-                        .foregroundStyle(
-                            MemoMapTheme.Textsecondary
-                        )
+                        .font(.system(size: 14))
+                        .foregroundStyle(MemoMapTheme.Textsecondary)
                     }
                     .padding(.top, 12)
                     
@@ -142,18 +133,18 @@ struct RegisterView: View {
                                 ProgressView()
                                     .tint(.white)
                             } else {
-                                Text("Create account")
+                                Text("Create Account")
                             }
                         }
                         .font(
                             .system(
-                                size: 11,
+                                size: 13,
                                 weight: .medium
                             )
                         )
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
-                        .frame(height: 37)
+                        .frame(height: 40)
                         .background(
                             MemoMapTheme.green
                         )
@@ -177,7 +168,7 @@ struct RegisterView: View {
                     }
                     .font(
                         .system(
-                            size: 9,
+                            size: 11,
                             weight: .medium
                         )
                     )
@@ -214,7 +205,7 @@ var body: some View {
         Text(title)
             .font(
                 .system(
-                    size: 9,
+                    size:11,
                     weight: .medium
                 )
             )
@@ -226,24 +217,27 @@ var body: some View {
             placeholder,
             text: $text
         )
-        .font(.system(size: 10))
-        .padding(.horizontal, 12)
-        .frame(height: 38)
+        .font(.system(size: 13))
+//        .padding(.horizontal, 12)
+//        .frame(height: 38)
+        .padding(.horizontal, 14)
+        .frame(height: 42)
+//
+//        .frame(maxWidth: .infinity)
+//        .frame(height: 40)
         .background(
             MemoMapTheme.inputBackground
         )
-        .overlay(
-            RoundedRectangle(
-                cornerRadius: 10
-            )
-            .stroke(
-                MemoMapTheme.inputBorder,
-                lineWidth: 0.8
-            )
-        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 13)
+                .stroke(
+                    MemoMapTheme.inputBorder,
+                    lineWidth: 1
+                )
+        }
         .clipShape(
             RoundedRectangle(
-                cornerRadius: 10
+                cornerRadius: 13
             )
         )
     }
@@ -266,7 +260,7 @@ struct MemoMapSecureField: View {
             Text(title)
                 .font(
                     .system(
-                        size: 9,
+                        size: 11,
                         weight: .medium
                     )
                 )
@@ -278,24 +272,22 @@ struct MemoMapSecureField: View {
                 placeholder,
                 text: $text
             )
-            .font(.system(size: 10))
-            .padding(.horizontal, 12)
-            .frame(height: 38)
+            .font(.system(size: 13))
+            .padding(.horizontal, 14)
+            .frame(height: 42)
             .background(
                 MemoMapTheme.inputBackground
             )
-            .overlay(
-                RoundedRectangle(
-                    cornerRadius: 10
-                )
-                .stroke(
-                    MemoMapTheme.inputBorder,
-                    lineWidth: 0.8
-                )
-            )
+            .overlay {
+                RoundedRectangle(cornerRadius: 13)
+                    .stroke(
+                        MemoMapTheme.inputBorder,
+                        lineWidth: 1
+                    )
+            }
             .clipShape(
                 RoundedRectangle(
-                    cornerRadius: 10
+                    cornerRadius: 13
                 )
             )
         }

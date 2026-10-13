@@ -14,11 +14,40 @@ struct Memo_app_IosApp: App {
     var appDelegate
     
     @StateObject private var auth = AuthViewModel()
+    
+    
+    @StateObject private var appLock =
+        AppLockManager.shared
+    
+    @Environment(\.scenePhase)
+    private var scenePhase
+    
+    
     var body: some Scene {
         WindowGroup {
 //            ContentView()
             RootView()
               .environmentObject(auth)
+              .environmentObject(appLock)
+        }
+        
+        .onChange(of: scenePhase) { newPhase in
+
+            switch newPhase {
+
+            case .background:
+
+                appLock.applicationDidEnterBackground()
+
+            case .active:
+
+                appLock.applicationBecameActive()
+
+
+            default:
+
+                break
+            }
         }
     }
 }
