@@ -20,88 +20,111 @@ struct ProfileView: View {
 
     var body: some View {
         ZStack {
-            Color(
-                red: 246.0 / 255.0,
-                green: 242.0 / 255.0,
-                blue: 235.0 / 255.0
-            )
+            MemoMapTheme.background
             .ignoresSafeArea()
-
-            VStack(spacing: 0) {
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Account")
-                        .font(.system(size: 42, weight: .bold))
-                        .foregroundStyle(Color(
-                            red: 30.0 / 255.0,
-                            green: 35.0 / 255.0,
-                            blue: 33.0 / 255.0
-                        ))
-
-                    Text("Privacy, reminders and account.")
-                        .font(.system(size: 18))
-                        .foregroundStyle(.secondary)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 36)
-                .padding(.top, 40)
-                .padding(.bottom, 28)
-
-  
-                ScrollView {
-                    VStack(spacing: 16) {
-
-
-                        profileCard(
-                            title: "Profile",
-                            subtitle: auth.fullName.isEmpty
-                                ? "Loading profile..."
-                                : auth.fullName
-                        )
-
-
-                        profileCard(
-                            title: "Email",
-                            subtitle: auth.user?.email ?? "No email available"
-                        )
-
-                        Button {
-                            Task {
-                                await toggleFaceID()
-                            }
-                        } label: {
-                            profileCardContent(
-                                title: "Face ID",
-                                subtitle: appLock.faceIDEnabled
-                                    ? "Enabled"
-                                    : "Disabled",
-                                showsChevron: true
-                            )
+            
+        
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading,spacing: 0) {
+                    
+                
+                    HStack(alignment: .center, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Account")
+                                .font(.system(size: 28, weight: .bold))
+                                .foregroundStyle(MemoMapTheme.black)
+                            
+                            Text("Privacy, reminders and account.")
+                                .font(.system(size: 12 , weight: .regular))
+                                .foregroundStyle(MemoMapTheme.Textsecondary)
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityHint(
-                            "Double tap to change Face ID protection."
-                        )
-
-                        // Logout
-
-                        Button {
-                            logout()
-                        } label: {
-                            profileCardContent(
-                                title: "Log out",
-                                subtitle: nil,
-                                showsChevron: false
-                            )
+                        
+                        Spacer(minLength: 8)
+                        ZStack {
+                            Image("LOGO")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(
+                                    width: 100,
+                                    height: 100
+                                )
                         }
-                        .buttonStyle(.plain)
+                        .frame(width: 76, height: 76)
+                        
                     }
-                    .padding(.horizontal, 36)
-                    .padding(.top, 8)
-                    .padding(.bottom, 120)
+                    .padding(.top, 30)
+                    .padding(.bottom, 34)
+                
+
+                    VStack(spacing: 14) {
+                        profileCard(
+                             title: "Profile",
+                             subtitle: auth.fullName.isEmpty
+                                 ? "Loading profile..."
+                                 : auth.fullName
+                         )
+                        Button {
+                              Task {
+                                  await toggleFaceID()
+                              }
+                          } label: {
+                              profileCardContent(
+                                  title: "Face ID",
+                                  subtitle: appLock.faceIDEnabled
+                                      ? "Enabled"
+                                      : "Disabled",
+                                  showsChevron: true
+                              )
+                          }
+                          .buttonStyle(.plain)
+                          .accessibilityHint(
+                              "Double tap to change Face ID protection."
+                          )
+                        
+                        Button {
+                                logout()
+                            } label: {
+                                HStack {
+                                    Text("Log out")
+                                        .font(
+                                            .system(
+                                                size: 14,
+                                                weight: .semibold
+                                            )
+                                        )
+                                        .foregroundStyle(MemoMapTheme.Textsecondary)
+
+                                    Spacer()
+
+                                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                                        .font(.system(size: 14))
+                                        .foregroundStyle(MemoMapTheme.Textsecondary)
+                                }
+                                .frame(maxWidth: .infinity, minHeight: 54)
+                                .padding(.horizontal, 14)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 19)
+                                        .fill(MemoMapTheme.Textsecondary)
+                                )
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 19)
+                                        .stroke(MemoMapTheme.inputBorder, lineWidth: 0.8)
+                                }
+                                .contentShape(
+                                    RoundedRectangle(cornerRadius: 19)
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
+
+                        Spacer(minLength: 30)
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 110)
+                    .frame(maxWidth: 520)
+                    .frame(maxWidth: .infinity)
                 }
             }
-        }
         .task {
             await auth.loadUserProfile()
         }
@@ -155,15 +178,10 @@ struct ProfileView: View {
     ) -> some View {
 
         HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 7) {
                 Text(title)
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(
-                        Color(
-                            red: 30.0 / 255.0,
-                            green: 35.0 / 255.0,
-                            blue: 33.0 / 255.0
-                        )
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(MemoMapTheme.Textsecondary
                     )
 
                 if let subtitle = subtitle {
@@ -172,13 +190,9 @@ struct ProfileView: View {
                             ? "Not available"
                             : subtitle
                     )
-                    .font(.system(size: 16))
+                    .font(.system(size: 11 , weight: .regular))
                     .foregroundStyle(
-                        Color(
-                            red: 102.0 / 255.0,
-                            green: 107.0 / 255.0,
-                            blue: 99.0 / 255.0
-                        )
+                        MemoMapTheme.Textsecondary
                     )
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
@@ -189,34 +203,25 @@ struct ProfileView: View {
 
             if showsChevron {
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(MemoMapTheme.Textsecondary)
             }
         }
-        .frame(maxWidth: .infinity, minHeight: 84, alignment: .leading)
-        .padding(.horizontal, 22)
+        .frame(maxWidth: .infinity, minHeight: 54, alignment: .leading)
+        .padding(.horizontal, 14)
         .background(
-            RoundedRectangle(cornerRadius: 28)
+            RoundedRectangle(cornerRadius: 19)
                 .fill(
-                    Color(
-                        red: 253.0 / 255.0,
-                        green: 251.0 / 255.0,
-                        blue: 246.0 / 255.0
-                    )
+                    MemoMapTheme.background
                 )
         )
         .overlay(
             RoundedRectangle(cornerRadius: 28)
                 .stroke(
-                    Color(
-                        red: 220.0 / 255.0,
-                        green: 213.0 / 255.0,
-                        blue: 200.0 / 255.0
-                    ),
-                    lineWidth: 1
+                    MemoMapTheme.inputBorder ,lineWidth: 0.8
                 )
         )
-        .contentShape(RoundedRectangle(cornerRadius: 28))
+        .contentShape(RoundedRectangle(cornerRadius: 19))
     }
 
     private func logout() {
