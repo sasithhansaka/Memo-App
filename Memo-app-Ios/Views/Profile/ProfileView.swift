@@ -12,11 +12,10 @@ import FirebaseAuth
 struct ProfileView: View {
 
     @EnvironmentObject var auth: AuthViewModel
-
     @StateObject private var appLock = AppLockManager.shared
-
     @State private var showFaceIDError = false
     @State private var faceIDErrorMessage = ""
+
 
     var body: some View {
         ZStack {
@@ -64,26 +63,43 @@ struct ProfileView: View {
                                  : auth.fullName
                          )
                         Button {
-                              Task {
-                                  await toggleFaceID()
-                              }
-                          } label: {
-                              profileCardContent(
-                                  title: "Face ID",
-                                  subtitle: appLock.faceIDEnabled
-                                      ? "Enabled"
-                                      : "Disabled",
-                                  showsChevron: true
-                              )
-                          }
-                          .buttonStyle(.plain)
+                            Task {
+                                if appLock.faceIDEnabled {
+                                    let success = await appLock.disableFaceID()
+
+                                    if !success {
+                                        faceIDErrorMessage =
+                                            "Face ID protection was not disabled. Please authenticate and try again."
+                                        showFaceIDError = true
+                                    }
+                                } else {
+                                    let success = await appLock.enableFaceID()
+
+                                    if !success {
+                                        faceIDErrorMessage =
+                                            "Face ID could not be enabled. Check your device settings and try again."
+                                        showFaceIDError = true
+                                    }
+                                }
+                            }
+                        } label: {
+                            profileCardContent(
+                                title: "Face ID",
+                                subtitle: appLock.faceIDEnabled ? "Enabled" : "Disabled",
+                                showsChevron: true
+                            )
+                        }
+                        .buttonStyle(.plain)
                           .accessibilityHint(
                               "Double tap to change Face ID protection."
                           )
                         
                         Button {
-                                logout()
-                            } label: {
+                            
+                            appLock.resetForLogout()
+                            auth.logout()
+                            
+                        } label: {
                                 HStack {
                                     Text("Log out")
                                         .font(
@@ -135,28 +151,6 @@ struct ProfileView: View {
             Button("OK", role: .cancel) { }
         } message: {
             Text(faceIDErrorMessage)
-        }
-    }
-
-    @MainActor
-    private func toggleFaceID() async {
-
-        if appLock.faceIDEnabled {
-            let success = await appLock.disableFaceID()
-
-            if !success {
-                faceIDErrorMessage =
-                    "Face ID protection was not disabled. Please authenticate and try again."
-                showFaceIDError = true
-            }
-        } else {
-            let success = await appLock.enableFaceID()
-
-            if !success {
-                faceIDErrorMessage =
-                    "Face ID could not be enabled. Check that Face ID or a device passcode is configured in your iPhone settings, then try again."
-                showFaceIDError = true
-            }
         }
     }
 
@@ -224,11 +218,11 @@ struct ProfileView: View {
         .contentShape(RoundedRectangle(cornerRadius: 19))
     }
 
-    private func logout() {
-        appLock.resetForLogout()
-
-        auth.logout()
-    }
+//    private func logout() {
+//        appLock.resetForLogout()
+//
+//        auth.logout()
+//    }
 }
 
 #Preview {

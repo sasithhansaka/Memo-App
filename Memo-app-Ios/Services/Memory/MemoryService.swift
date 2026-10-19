@@ -147,5 +147,12 @@ final class MemoryService {
                 onChange(memories)
             }
     }
+    
+    func deletememory(id: String) async throws{
+        try await db
+            .collection("memories")
+            .document(id)
+            .updateData(["isDeleted": true])
+    }
 }
 

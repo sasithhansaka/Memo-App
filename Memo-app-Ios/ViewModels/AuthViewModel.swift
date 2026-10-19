@@ -20,24 +20,35 @@ final class AuthViewModel: ObservableObject {
 
 
     private let db = Firestore.firestore()
+    private var authListenerHandle: AuthStateDidChangeListenerHandle?
 
 
     init() {
-        self.user = Auth.auth().currentUser
+            user = Auth.auth().currentUser
 
-        Auth.auth().addStateDidChangeListener { [weak self] _, user in
-            Task { @MainActor in
+            authListenerHandle = Auth.auth().addStateDidChangeListener {
+                [weak self] _, user in
 
-                self?.user = user
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
 
-                if user != nil {
-                    await self?.loadUserProfile()
-                } else {
-                    self?.fullName = ""
+                    self.user = user
+
+                    if user != nil {
+                        await self.loadUserProfile()
+                    } else {
+                        self.fullName = ""
+                    }
                 }
             }
         }
+    
+    deinit {
+        if let authListenerHandle {
+            Auth.auth().removeStateDidChangeListener(authListenerHandle)
+        }
     }
+
 
 
     func register(
@@ -169,6 +180,7 @@ final class AuthViewModel: ObservableObject {
     
     func loadUserProfile() async {
         guard let uid = Auth.auth().currentUser?.uid else {
+            fullName=""
             return
         }
 
@@ -182,6 +194,7 @@ final class AuthViewModel: ObservableObject {
 
 
             guard let data = document.data() else {
+                fullName=""
                 return
             }
 
@@ -204,6 +217,7 @@ final class AuthViewModel: ObservableObject {
 
             user = nil
             fullName=""
+            errormessage = ""
 
         } catch {
 
