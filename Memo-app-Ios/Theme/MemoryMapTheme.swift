@@ -20,6 +20,12 @@ enum MemoMapTheme {
     green: 122 / 255,
     blue: 99 / 255
     )
+    static  let lightGreen = Color(
+     
+            red: 209 / 255.0,
+            green: 224 / 255.0,
+            blue: 204 / 255.0
+    )
 
     static let black = Color(
         red: 28 / 255,
@@ -35,9 +41,15 @@ enum MemoMapTheme {
     
     
     static let inputBackground = Color(
-    red: 253 / 255,
-    green: 251 / 255,
-    blue: 246 / 255
+        red: 253.0 / 255,
+        green: 251.0 / 255,
+        blue: 246.0 / 255
+    )
+    
+    static let White =  Color(
+        red: 255 / 255,
+        green: 255 / 255,
+        blue: 255 / 255
     )
     
     static let inputBorder = Color(

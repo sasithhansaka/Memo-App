@@ -13,27 +13,29 @@ import UIKit
 struct SearchView: View {
 
     @StateObject private var viewModel = SearchViewModel()
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
 
         GeometryReader { geometry in
+            
 
             VStack(spacing: 0) {
 
-                VStack(alignment: .leading, spacing: 16) {
-                    header
-
-                    searchBar
-
-                    FilterSection
-                }
-                .padding(.horizontal, 18)
-                .padding(.top, 16)
-                .padding(.bottom, 14)
-                .frame(maxWidth: 520)
-                .frame(maxWidth: .infinity)
-
                 ScrollView(showsIndicators: false) {
+                    
+                    VStack(alignment: .leading, spacing: 16) {
+                        header
+
+                        searchBar
+
+                        FilterSection
+                    }
+//                    .padding(.horizontal, 18)
+//                    .padding(.top, 16)
+//                    .padding(.bottom, 14)
+                    .frame(maxWidth: 520)
+                    .frame(maxWidth: .infinity)
 
                     if viewModel.isLoading {
                         LoadingView
@@ -52,9 +54,9 @@ struct SearchView: View {
                         }
                     }
                 }
-                .padding(.horizontal, 18)
-                .padding(.top, 16)
-                .padding(.bottom, 14)
+                .padding(.horizontal, 15)
+                .padding(.top, 20)
+                .padding(.bottom, 0)
                 .frame(maxWidth: 520)
                 .frame(maxWidth: .infinity)
             }
@@ -70,6 +72,9 @@ struct SearchView: View {
             }
             .clipped()
         }
+//        .ignoresSafeArea(edges: .top)
+
+        .navigationBarBackButtonHidden(true)
 
         .onAppear {
             viewModel.startListening()
@@ -79,27 +84,42 @@ struct SearchView: View {
         }
 
     }
+    
 
     private var header: some View {
+        HStack(spacing: 10) {
 
-        HStack {
             VStack(alignment: .leading, spacing: 4) {
+
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(MemoMapTheme.black)
+                        .frame(width: 30, height: 30)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+
                 Text("Search memories")
-                    .font(.system(size: 25, weight: .bold))
+                    .font(.system(size: 26, weight: .bold))
                     .foregroundStyle(MemoMapTheme.black)
 
                 Text("Find a memory by its story, place or date.")
-                    .font(.system(size: 11))
+                    .font(.system(size: 15))
                     .foregroundStyle(MemoMapTheme.Textsecondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
-            Spacer(minLength: 4)
+            Spacer(minLength: 2)
 
             Image("LOGO")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 52, height: 52)
+                .frame(width: 76, height: 76)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var searchBar: some View {
@@ -134,7 +154,8 @@ struct SearchView: View {
                     Categorychip(category)
                 }
             }
-            .padding(.vertical, 2)
+            .padding(.vertical, 1)
+            .padding(.horizontal, 1)
         }
     }
 
@@ -146,80 +167,86 @@ struct SearchView: View {
             viewModel.selectedCategory(category)
         } label: {
             Text(category)
-                .font(.caption)
+                .font(.system(size: 13, weight: .medium))
+                   .foregroundStyle(
+                       MemoMapTheme.green
+                   )
+                   .padding(.horizontal, 20)
+                   .frame(height: 44)
+                   .background(
+                       selected
+                       ? MemoMapTheme.lightGreen
+                       : MemoMapTheme.lightGreen
+                   )
+                   .clipShape(Capsule())
+                   .overlay {
+                       Capsule()
+                           .stroke(
+                               selected
+                                   ? MemoMapTheme.inputBorder.opacity(1)
+                                   : Color.clear,
+                               lineWidth: 1.2
+                           )
+                   }
         }
     }
 
     private func memoryCard(_ memory: Memory) -> some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 15) {
             VStack(alignment: .leading, spacing: 7) {
-                Text(memory.title)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(MemoMapTheme.black)
-                    .lineLimit(2)
+                 Text(memory.title)
+                     .font(.system(size: 15, weight: .semibold))
+                     .foregroundStyle(MemoMapTheme.black)
+                     .lineLimit(2)
+                     .multilineTextAlignment(.leading)
 
-                Text(
-                    memory.memoryDate,
-                    format: .dateTime
-                        .month(.abbreviated)
-                        .day()
-                        .year()
-                )
-                .font(.system(size: 9))
-                .foregroundStyle(MemoMapTheme.Textsecondary)
+                 HStack(spacing: 4) {
+                     Text(memory.memoryDate, format: .dateTime
+                         .month(.abbreviated)
+                         .day()
+                         .year()
+                     )
 
-                if let place = memory.placeName,
-                    !place.isEmpty
-                {
-                    Text(place)
-                        .font(.system(size: 9))
-                        .foregroundStyle(MemoMapTheme.Textsecondary)
-                        .lineLimit(1)
-                }
+                     Text("•")
 
-                if let description = memory.description,
-                    !description.isEmpty
-                {
-                    Text(description)
-                        .font(.system(size: 10))
-                        .foregroundStyle(MemoMapTheme.Textsecondary)
-                        .lineLimit(1)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 13)
-            .padding(.vertical, 12)
+                     Text(memory.placeName ?? "Location not added")
+                         .lineLimit(1)
+                 }
+                 .font(.system(size: 13))
+                 .foregroundStyle(MemoMapTheme.Textsecondary)
+             }
+             .frame(maxWidth: .infinity, alignment: .leading)
+             .padding(.leading, 12)
+             .padding(.vertical, 12)
 
-            Group {
-                if let image = MemoryImageEncoder.decode(
-                    memory.coverPhotoBase64
-                ) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                } else {
-                    ZStack {
-                        MemoMapTheme.inputBorder.opacity(0.3)
+             Group {
+                 if let image = MemoryImageEncoder.decode(
+                     memory.coverPhotoBase64
+                 ) {
+                     Image(uiImage: image)
+                         .resizable()
+                         .scaledToFill()
+                 } else {
+                     ZStack {
+//                         MemoMapTheme.inputBorder.opacity(0.3)
 
-                        Image(systemName: "photo")
-                            .foregroundStyle(
-                                MemoMapTheme.Textsecondary
-                            )
-                    }
-                }
-            }
-            .frame(width: 104, height: 88)
-            .clipped()
-        }
-        .frame(height: 88)
-        .background(Color.white.opacity(0.8))
-        .clipShape(RoundedRectangle(cornerRadius: 15))
-        .overlay {
-            RoundedRectangle(cornerRadius: 15)
-                .stroke(MemoMapTheme.inputBorder, lineWidth: 0.8)
-        }
-        .frame(maxWidth: .infinity)
-
+                         Image(systemName: "photo")
+                             .foregroundStyle(MemoMapTheme.Textsecondary)
+                     }
+                 }
+             }
+             .frame(width: 110, height: 78)
+             .padding(.vertical , 15)
+             .clipped()
+         }
+         .frame(height: 78)
+         .background(MemoMapTheme.inputBackground)
+         .clipShape(RoundedRectangle(cornerRadius: 12))
+         .overlay {
+             RoundedRectangle(cornerRadius: 12)
+                 .stroke(MemoMapTheme.inputBorder, lineWidth: 0.8)
+         }
+         .frame(maxWidth: .infinity)
     }
 
     private var LoadingView: some View {

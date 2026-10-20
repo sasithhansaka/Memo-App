@@ -26,6 +26,9 @@ struct Memory: Identifiable {
     var updatedAt: Date
     var isDeleted: Bool
     
+    var notifyDate: Date?
+
+    
 
     var firestoreData: [String: Any] {
         [
@@ -42,7 +45,10 @@ struct Memory: Identifiable {
             "placeName": placeName as Any? ?? NSNull(),
             "createdAt": Timestamp(date: createdAt),
             "updatedAt": Timestamp(date: updatedAt),
-            "isDeleted": isDeleted
+            "isDeleted": isDeleted,
+            "notify_date": notifyDate.map {
+               Timestamp(date: $0)
+           } as Any? ?? NSNull()
         ]
     }
     
@@ -92,6 +98,12 @@ struct Memory: Identifiable {
           }
 
           self.isDeleted = data["isDeleted"] as? Bool ?? false
+        
+            if let timestamp = data["notify_date"] as? Timestamp {
+               self.notifyDate = timestamp.dateValue()
+           } else {
+               self.notifyDate = nil
+           }
       }
     
     init(
@@ -109,7 +121,8 @@ struct Memory: Identifiable {
         placeName: String?,
         createdAt: Date,
         updatedAt: Date,
-        isDeleted: Bool
+        isDeleted: Bool,
+        notifyDate: Date? = nil
     ) {
         self.id = id
         self.userId = userId
@@ -126,6 +139,7 @@ struct Memory: Identifiable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.isDeleted = isDeleted
+        self.notifyDate = notifyDate
     }
 
 }

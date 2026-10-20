@@ -576,8 +576,6 @@ struct AddMemoryView: View {
         )
     }
 
-    // MARK: - Shared UI
-
     private func sectionTitle(
         _ text: String,
         required: Bool

@@ -5,9 +5,10 @@
 //  Created by student3 on 2026-10-01.
 //
 
-
 import SwiftUI
 import Foundation
+import FirebaseAuth
+
 
 struct RootView: View {
 
@@ -24,11 +25,26 @@ struct RootView: View {
                     MainTabView()
                 }
             }
+        
+            .task(id: auth.user?.uid) {
+                guard auth.user != nil, !appLock.isLocked else {
+                    return
+                }
+
+                LocationNotificationManager.shared.start()
+                LocationNotificationManager.shared.refresh()
+            }
     }
+
+    
 }
 
 #Preview {
     RootView()
         .environmentObject(AuthViewModel())
         .environmentObject(AppLockManager.shared)
+    
+    .task {
+        LocationNotificationManager.shared.start()
+    }
 }

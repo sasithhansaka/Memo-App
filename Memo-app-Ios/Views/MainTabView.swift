@@ -22,30 +22,32 @@ struct MainTabView: View {
     @State private var tab: tabs = .home
     
     var body : some View{
-        ZStack(alignment: .bottom){
-            Group{
-            switch tab {
-                case .home: HomeView()
-                    
-                case .map: MemoryMapView()
-                    
-                case .add: AddMemoryView()
-                    
-                case .timeline: TimelineView()
-                    
-                case .profile: ProfileView()
+        NavigationStack{
+            ZStack(alignment: .bottom){
+                Group{
+                    switch tab {
+                    case .home: HomeView()
+                        
+                    case .map: MemoryMapView()
+                        
+                    case .add: AddMemoryView()
+                        
+                    case .timeline: TimelineView()
+                        
+                    case .profile: ProfileView()
+                    }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
+                MainTabBar(tab : $tab)
+                //            .padding(.bottom, 10)
+                //            .padding(.horizontal,  18)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            MainTabBar(tab : $tab)
-            .padding(.bottom, 10)
-            .padding(.horizontal,  18)
+            .background(
+                MemoMapTheme.background
+                    .ignoresSafeArea()
+            )
         }
-        .background(
-            MemoMapTheme.background
-                .ignoresSafeArea()
-        )
     }
 }
 
@@ -87,20 +89,14 @@ struct MainTabBar: View{
                 )
             }
             .frame(height: 58)
-            .padding(.horizontal, 4)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 18)
+            .padding(.bottom, 8)
+            .padding(.bottom, 4)
             .background(
                 MemoMapTheme.inputBackground
             )
-            .clipShape(
-                Capsule()
-            )
-            .overlay(
-                Capsule()
-                    .stroke(
-                        MemoMapTheme.inputBorder,
-                        lineWidth: 1
-                    )
-            )
+
         }
         private func navigationItem(
             tab: tabs,
@@ -121,7 +117,7 @@ struct MainTabBar: View{
                         Image(systemName: icon)
                             .font(
                                 .system(
-                                    size: 17,
+                                    size: 20,
                                     weight:self.tab == tab
                                         ? .medium
                                         : .regular
@@ -131,7 +127,7 @@ struct MainTabBar: View{
                         Text(title)
                             .font(
                                 .system(
-                                    size: 9,
+                                    size: 10,
                                     weight: self.tab == tab
                                         ? .semibold
                                         : .regular
@@ -144,7 +140,7 @@ struct MainTabBar: View{
                         : MemoMapTheme.Textsecondary
                     )
                     .frame(maxWidth: .infinity)
-                    .frame(height: 48)
+                    .frame(height: 54)
                     .background {
 
                         if self.tab == tab {

@@ -154,5 +154,37 @@ final class MemoryService {
             .document(id)
             .updateData(["isDeleted": true])
     }
+    
+    
+    func updateNotifyDate(memoryID: String, date: Date = Date()) async throws {
+        
+        guard let userID = Auth.auth().currentUser?.uid else {
+            throw MemoryServiceError.userNotSigned
+        }
+
+        let document = db.collection("memories").document(memoryID)
+        let snapshot = try await document.getDocument()
+
+        guard
+            let data = snapshot.data(),
+            data["userID"] as? String == userID,
+            (data["isDeleted"] as? Bool ?? false) == false
+        else {
+            throw NSError(
+                domain: "MemoryService",
+                code: 403,
+                userInfo: [
+                    NSLocalizedDescriptionKey:
+                        "This memory is unavailable or does not belong to you."
+                ]
+            )
+        }
+
+        try await document.updateData([
+            "notify_date": Timestamp(date: date)
+        ])
+        
+    }
+
 }
 

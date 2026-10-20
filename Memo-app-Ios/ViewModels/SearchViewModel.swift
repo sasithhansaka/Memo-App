@@ -19,7 +19,7 @@ final class SearchViewModel: ObservableObject {
     @Published private(set) var errorMessage : String?
     
     private let memoryService: MemoryService
-      private var listener: ListenerRegistration?
+    private var listener: ListenerRegistration?
     
     let categories = [
             "All",

@@ -21,21 +21,15 @@ struct MemoryMapView: View {
             VStack(spacing: 0) {
 
                 header
-                    .padding(.horizontal, 20)
-                    .padding(.top, 12)
-                    .padding(.bottom, 16)
-                    .background(MemoMapTheme.background)
 
                 ZStack(alignment: .bottom) {
                     mapContent
                         .frame(
                             width: geometry.size.width,
-                            height: geometry.size.height
-                                - headerHeight
+                            height: geometry.size.height  * 3 / 4
                         )
                         .clipped()
 
-                    // Selected memory preview
                     if let memory = viewModel.selectedMemory {
                         memoryPreview(memory)
                             .padding(.horizontal, 16)
@@ -45,6 +39,11 @@ struct MemoryMapView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+            .padding(.horizontal, 15)
+//            .padding(.top, 20)
+            .padding(.bottom, 24)
+//            .frame(maxWidth: 520)
+//            .frame(maxWidth: .infinity)
             .frame(
                 width: geometry.size.width,
                 height: geometry.size.height
@@ -60,37 +59,33 @@ struct MemoryMapView: View {
         }
     }
 
-    private var headerHeight: CGFloat {
-        104
-    }
+//    private var headerHeight: CGFloat {
+//        104
+//    }
 
 
     private var header: some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 5) {
-                Text("Memory Map")
-                    .font(.system(size: 28, weight: .bold))
-                    .tracking(-0.6)
+        
+        HStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Google Map")
+                    .font(.system(size: 26, weight: .bold))
                     .foregroundStyle(MemoMapTheme.black)
 
                 Text("Explore your moments by place.")
-                    .font(.system(size: 12))
+                    .font(.system(size: 15))
                     .foregroundStyle(MemoMapTheme.Textsecondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
-            Spacer(minLength: 8)
+            Spacer(minLength: 2)
 
-                ZStack {
-                    Image("LOGO")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(
-                            width: 100,
-                            height: 100
-                        )
-                }
+            Image("LOGO")
+                .resizable()
+                .scaledToFit()
                 .frame(width: 76, height: 76)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var mapContent: some View {
@@ -195,64 +190,61 @@ struct MemoryMapView: View {
     }
 
     private func memoryPreview(_ memory: Memory) -> some View {
-
-        HStack(spacing: 12) {
+        HStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 7) {
-                Text(memory.title)
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(MemoMapTheme.black)
-                    .lineLimit(2)
+                 Text(memory.title)
+                     .font(.system(size: 15, weight: .semibold))
+                     .foregroundStyle(MemoMapTheme.black)
+                     .lineLimit(2)
+                     .multilineTextAlignment(.leading)
 
-                Text(
-                    memory.placeName?.isEmpty == false
-                        ? memory.placeName!
-                        : "Location saved"
-                )
-                .font(.system(size: 11))
-                .foregroundStyle(MemoMapTheme.Textsecondary)
-                .lineLimit(2)
+                 HStack(spacing: 4) {
+                     Text(memory.memoryDate, format: .dateTime
+                         .month(.abbreviated)
+                         .day()
+                         .year()
+                     )
 
-                Text(
-                    memory.memoryDate,
-                    format: .dateTime.month(.abbreviated).day()
-                )
-                .font(.system(size: 11))
-                .foregroundStyle(MemoMapTheme.Textsecondary)
-            }
+                     Text("•")
 
-            Spacer(minLength: 0)
+                     Text(memory.placeName ?? "Location not added")
+                         .lineLimit(1)
+                 }
+                 .font(.system(size: 13))
+                 .foregroundStyle(MemoMapTheme.Textsecondary)
+             }
+             .frame(maxWidth: .infinity, alignment: .leading)
+             .padding(.leading, 12)
+             .padding(.vertical, 12)
 
-            Group {
-                if let image = MemoryImageEncoder.decode(
-                    memory.coverPhotoBase64
-                ) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                } else {
-                    ZStack {
-                        MemoMapTheme.inputBorder.opacity(0.4)
+             Group {
+                 if let image = MemoryImageEncoder.decode(
+                     memory.coverPhotoBase64
+                 ) {
+                     Image(uiImage: image)
+                         .resizable()
+                         .scaledToFill()
+                 } else {
+                     ZStack {
+//                         MemoMapTheme.inputBorder.opacity(0.3)
 
-                        Image(systemName: "photo")
-                            .foregroundStyle(MemoMapTheme.Textsecondary)
-                    }
-                }
-            }
-            .frame(width: 88, height: 76)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-        }
-        .padding(12)
-        .background(MemoMapTheme.background)
-        .clipShape(RoundedRectangle(cornerRadius: 18))
-        .overlay {
-            RoundedRectangle(cornerRadius: 18)
-                .stroke(MemoMapTheme.inputBorder, lineWidth: 0.8)
-        }
-        
-        .shadow(color: .black.opacity(0.12), radius: 8, y: 3)
-
-        .frame(maxWidth: 440)
-        .frame(maxWidth: .infinity)
+                         Image(systemName: "photo")
+                             .foregroundStyle(MemoMapTheme.Textsecondary)
+                     }
+                 }
+             }
+             .frame(width: 110, height: 78)
+             .padding(.vertical , 15)
+             .clipped()
+         }
+         .frame(height: 78)
+         .background(MemoMapTheme.inputBackground)
+         .clipShape(RoundedRectangle(cornerRadius: 12))
+         .overlay {
+             RoundedRectangle(cornerRadius: 12)
+                 .stroke(MemoMapTheme.inputBorder, lineWidth: 0.8)
+         }
+         .frame(maxWidth: .infinity)
     }
 }
 

@@ -272,6 +272,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID protects your private memories in Memo.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Memo monitors saved memory locations to notify you when you return.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Memo uses your location to help you revisit saved memories.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "App using microphone";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "App converts your speech into text for memory descriptions.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -312,6 +314,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID protects your private memories in Memo.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Memo monitors saved memory locations to notify you when you return.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Memo uses your location to help you revisit saved memories.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "App using microphone";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "App converts your speech into text for memory descriptions.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

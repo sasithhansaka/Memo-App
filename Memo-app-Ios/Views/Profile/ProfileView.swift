@@ -26,35 +26,8 @@ struct ProfileView: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading,spacing: 0) {
                     
-                
-                    HStack(alignment: .center, spacing: 12) {
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("Account")
-                                .font(.system(size: 28, weight: .bold))
-                                .foregroundStyle(MemoMapTheme.black)
-                            
-                            Text("Privacy, reminders and account.")
-                                .font(.system(size: 12 , weight: .regular))
-                                .foregroundStyle(MemoMapTheme.Textsecondary)
-                        }
-                        
-                        Spacer(minLength: 8)
-                        ZStack {
-                            Image("LOGO")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(
-                                    width: 100,
-                                    height: 100
-                                )
-                        }
-                        .frame(width: 76, height: 76)
-                        
-                    }
-                    .padding(.top, 30)
-                    .padding(.bottom, 34)
-                
-
+                    header
+                    
                     VStack(spacing: 14) {
                         profileCard(
                              title: "Profile",
@@ -153,7 +126,31 @@ struct ProfileView: View {
             Text(faceIDErrorMessage)
         }
     }
+    
+    private var header: some View {
+        HStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Account")
+                    .font(.system(size: 26, weight: .bold))
+                    .foregroundStyle(MemoMapTheme.black)
 
+                Text("Your memories are waiting to be rediscovered.")
+                    .font(.system(size: 15))
+                    .foregroundStyle(MemoMapTheme.Textsecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer(minLength: 2)
+
+            Image("LOGO")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 76, height: 76)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    
     private func profileCard(
         title: String,
         subtitle: String
