@@ -28,13 +28,27 @@ struct ProfileView: View {
                     
                     header
                     
-                    VStack(spacing: 14) {
-                        profileCard(
-                             title: "Profile",
-                             subtitle: auth.fullName.isEmpty
-                                 ? "Loading profile..."
-                                 : auth.fullName
-                         )
+                    VStack(spacing: 0) {
+                        
+                        sectionHeading("PERSONAL DETAILS")
+
+                        detailRow(
+                            title: "Full name",
+                            value: auth.fullName.isEmpty
+                                ? "Loading profile..."
+                                : auth.fullName
+                        )
+
+                        divider
+                        
+                        
+                        detailRow(
+                            title: "Email address",
+                            value: auth.user?.email ?? "Not available"
+                        )
+                        
+                        divider
+
                         Button {
                             Task {
                                 if appLock.faceIDEnabled {
@@ -56,16 +70,61 @@ struct ProfileView: View {
                                 }
                             }
                         } label: {
-                            profileCardContent(
-                                title: "Face ID",
-                                subtitle: appLock.faceIDEnabled ? "Enabled" : "Disabled",
-                                showsChevron: true
-                            )
+                            HStack {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Face ID")
+                                        .font(MemoFont.dmSansMedium(16))
+                                        .foregroundStyle(MemoMapTheme.black)
+
+                                    Text(
+                                        appLock.faceIDEnabled
+                                            ? "Enabled"
+                                            : "Disabled"
+                                    )
+                                    .font(MemoFont.dmSansRegular(14))
+                                    .foregroundStyle(MemoMapTheme.Textsecondary)
+                                }
+
+                                Spacer()
+
+                                Toggle(
+                                    "Face ID",
+                                    isOn: Binding(
+                                        get: { appLock.faceIDEnabled },
+                                        set: { _ in
+                                            Task {
+                                                if appLock.faceIDEnabled {
+                                                    let success = await appLock.disableFaceID()
+                                                    if !success {
+                                                        faceIDErrorMessage =
+                                                            "Face ID protection could not be disabled. Please authenticate and try again."
+                                                        showFaceIDError = true
+                                                    }
+                                                } else {
+                                                    let success = await appLock.enableFaceID()
+                                                    if !success {
+                                                        faceIDErrorMessage =
+                                                            "Face ID could not be enabled. Check your device settings and try again."
+                                                        showFaceIDError = true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    )
+                                )
+                                .labelsHidden()
+                                .tint(MemoMapTheme.green)
+                            }
+                            .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                          .accessibilityHint(
-                              "Double tap to change Face ID protection."
-                          )
+                        .padding(.vertical, 20)
+                        
+                        divider
+
+                      // OTHER
+                      sectionHeading("OTHER")
+                          .padding(.top, 24)
                         
                         Button {
                             
@@ -73,45 +132,32 @@ struct ProfileView: View {
                             auth.logout()
                             
                         } label: {
-                                HStack {
-                                    Text("Log out")
-                                        .font(
-                                            .system(
-                                                size: 14,
-                                                weight: .semibold
-                                            )
-                                        )
-                                        .foregroundStyle(MemoMapTheme.Textsecondary)
+                            HStack {
+                                Text("Log out")
+                                   .font(MemoFont.dmSansMedium(16))
+                                   .foregroundStyle(MemoMapTheme.black)
 
-                                    Spacer()
+                               Spacer()
 
-                                    Image(systemName: "rectangle.portrait.and.arrow.right")
-                                        .font(.system(size: 14))
-                                        .foregroundStyle(MemoMapTheme.Textsecondary)
+                                Spacer()
+
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                                .font(.system(size: 16))
+                                .foregroundStyle(MemoMapTheme.Textsecondary)
                                 }
-                                .frame(maxWidth: .infinity, minHeight: 54)
-                                .padding(.horizontal, 14)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 19)
-                                        .fill(MemoMapTheme.Textsecondary)
-                                )
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 19)
-                                        .stroke(MemoMapTheme.inputBorder, lineWidth: 0.8)
-                                }
-                                .contentShape(
-                                    RoundedRectangle(cornerRadius: 19)
-                                )
+                            .padding(.vertical, 20)
+                            .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
                         }
 
                         Spacer(minLength: 30)
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.bottom, 110)
-                    .frame(maxWidth: 520)
-                    .frame(maxWidth: .infinity)
+                .padding(.horizontal, 15)
+                .padding(.top, 20)
+                .padding(.bottom, 24)
+                .frame(maxWidth: 520)
+                .frame(maxWidth: .infinity)
                 }
             }
         .task {
@@ -131,88 +177,52 @@ struct ProfileView: View {
         HStack(spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Account")
-                    .font(.system(size: 26, weight: .bold))
-                    .foregroundStyle(MemoMapTheme.black)
+                    .font(MemoFont.dmSansRegular(34))                    .foregroundStyle(MemoMapTheme.black)
 
                 Text("Your memories are waiting to be rediscovered.")
-                    .font(.system(size: 15))
+                    .font(MemoFont.dmSansRegular(15))
                     .foregroundStyle(MemoMapTheme.Textsecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer(minLength: 2)
 
-            Image("LOGO")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 76, height: 76)
+//            Image("LOGO")
+//                .resizable()
+//                .scaledToFit()
+//                .frame(width: 76, height: 76)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.bottom ,24)
     }
     
     
-    private func profileCard(
-        title: String,
-        subtitle: String
-    ) -> some View {
-        profileCardContent(
-            title: title,
-            subtitle: subtitle,
-            showsChevron: false
-        )
+    private func sectionHeading(_ title: String) -> some View {
+        Text(title)
+            .font(MemoFont.dmSansMedium(12))
+            .foregroundStyle(MemoMapTheme.Textsecondary)
+            .padding(.top, 8)
+            .padding(.bottom, 8)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private func profileCardContent(
-        title: String,
-        subtitle: String?,
-        showsChevron: Bool
+    private func detailRow(
+    title: String,
+    value: String
     ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(MemoFont.dmSansMedium(16))
+                .foregroundStyle(MemoMapTheme.black)
 
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 7) {
-                Text(title)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(MemoMapTheme.Textsecondary
-                    )
-
-                if let subtitle = subtitle {
-                    Text(
-                        subtitle.isEmpty
-                            ? "Not available"
-                            : subtitle
-                    )
-                    .font(.system(size: 11 , weight: .regular))
-                    .foregroundStyle(
-                        MemoMapTheme.Textsecondary
-                    )
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
-                }
-            }
-
-            Spacer(minLength: 0)
-
-            if showsChevron {
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(MemoMapTheme.Textsecondary)
-            }
+            Text(value)
+                .font(MemoFont.dmSansRegular(15))
+                .foregroundStyle(MemoMapTheme.Textsecondary)
+                .textSelection(.enabled)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .frame(maxWidth: .infinity, minHeight: 54, alignment: .leading)
-        .padding(.horizontal, 14)
-        .background(
-            RoundedRectangle(cornerRadius: 19)
-                .fill(
-                    MemoMapTheme.background
-                )
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 28)
-                .stroke(
-                    MemoMapTheme.inputBorder ,lineWidth: 0.8
-                )
-        )
-        .contentShape(RoundedRectangle(cornerRadius: 19))
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, 20)
     }
 
 //    private func logout() {
@@ -220,6 +230,12 @@ struct ProfileView: View {
 //
 //        auth.logout()
 //    }
+    
+    private var divider: some View {
+        Rectangle()
+            .fill(MemoMapTheme.inputBorder.opacity(0.5))
+            .frame(height: 1)
+    }
 }
 
 #Preview {

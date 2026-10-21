@@ -16,9 +16,22 @@
 		D7D8E732306E240A007CF230 /* Memo-app-Ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Memo-app-Ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D7E7D4C730887CE800C12FAF /* Exceptions for "Memo-app-Ios" folder in "Memo-app-Ios" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D7D8E731306E240A007CF230 /* Memo-app-Ios */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D7D8E734306E240A007CF230 /* Memo-app-Ios */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D7E7D4C730887CE800C12FAF /* Exceptions for "Memo-app-Ios" folder in "Memo-app-Ios" target */,
+			);
 			path = "Memo-app-Ios";
 			sourceTree = "<group>";
 		};
@@ -271,6 +284,8 @@
 				DEVELOPMENT_TEAM = 6YF2HPTXY9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Memo-app-Ios/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID protects your private memories in Memo.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Memo monitors saved memory locations to notify you when you return.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Memo uses your location to help you revisit saved memories.";
@@ -313,6 +328,8 @@
 				DEVELOPMENT_TEAM = 6YF2HPTXY9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Memo-app-Ios/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID protects your private memories in Memo.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Memo monitors saved memory locations to notify you when you return.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Memo uses your location to help you revisit saved memories.";

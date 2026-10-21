@@ -126,12 +126,9 @@ struct MainTabBar: View{
 
                         Text(title)
                             .font(
-                                .system(
-                                    size: 10,
-                                    weight: self.tab == tab
-                                        ? .semibold
-                                        : .regular
-                                )
+                                 self.tab == tab
+                                 ? MemoFont.dmSansMedium(12)
+                                 : MemoFont.dmSansMedium(10)
                             )
                     }
                     .foregroundStyle(

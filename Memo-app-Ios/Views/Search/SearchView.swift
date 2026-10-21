@@ -87,10 +87,10 @@ struct SearchView: View {
     
 
     private var header: some View {
+        
         HStack(spacing: 10) {
-
             VStack(alignment: .leading, spacing: 4) {
-
+                
                 Button {
                     dismiss()
                 } label: {
@@ -101,61 +101,72 @@ struct SearchView: View {
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                
+                
+                    Text("Search memories")
+                    .font(MemoFont.dmSansRegular(34))                    .foregroundStyle(MemoMapTheme.black)
 
-                Text("Search memories")
-                    .font(.system(size: 26, weight: .bold))
-                    .foregroundStyle(MemoMapTheme.black)
-
-                Text("Find a memory by its story, place or date.")
-                    .font(.system(size: 15))
+                    Text("Find a memory by its story, place or date.")
+                    .font(MemoFont.dmSansRegular(15))
                     .foregroundStyle(MemoMapTheme.Textsecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
-
+            .padding(.bottom , 10)
             Spacer(minLength: 2)
+            
 
-            Image("LOGO")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 76, height: 76)
+//            Image("LOGO")
+//                .resizable()
+//                .scaledToFit()
+//                .frame(width: 76, height: 76)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        
     }
 
     private var searchBar: some View {
-        HStack {
-            TextField(
-                "Search memories..",
-                text: $viewModel.searchText
-            )
-            .font(.system(size: 13))
-            .autocorrectionDisabled()
-            .textInputAutocapitalization(.never)
-            .submitLabel(.search)
+        HStack() {
+        Image("search")
+                .font(.system(size: 16, weight: .medium))
+                .foregroundStyle(MemoMapTheme.Textsecondary)
+        
+        
+        TextField(
+            "Search memories..",
+            text: $viewModel.searchText
+        )
+        .font(.system(size: 13))
+        .autocorrectionDisabled()
+        .textInputAutocapitalization(.never)
+        .submitLabel(.search)
 
         }
         .padding(.horizontal, 14)
-        .frame(height: 44)
+        
+        .frame(height: 48)
         .background {
-            RoundedRectangle(cornerRadius: 13)
+            RoundedRectangle(cornerRadius: 12)
                 .fill(Color.white.opacity(0.8))
         }
         .overlay {
-            RoundedRectangle(cornerRadius: 13)
-                .stroke(MemoMapTheme.inputBorder, lineWidth: 0.8)
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(MemoMapTheme.inputBorder, lineWidth: 0.6)
         }
     }
 
     private var FilterSection: some View {
 
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 7) {
+            HStack(spacing: 8) {
                 ForEach(viewModel.categories, id: \.self) { category in
                     Categorychip(category)
                 }
             }
-            .padding(.vertical, 1)
-            .padding(.horizontal, 1)
+//            .padding(.vertical, 0)
+//            .padding(.horizontal, 1)
+            .padding(.top ,8)
+            .padding(.bottom ,20)
+            
         }
     }
 
@@ -171,19 +182,19 @@ struct SearchView: View {
                    .foregroundStyle(
                        MemoMapTheme.green
                    )
-                   .padding(.horizontal, 20)
-                   .frame(height: 44)
+                   .padding(.horizontal, 15)
+                   .frame(height: 36)
                    .background(
                        selected
                        ? MemoMapTheme.lightGreen
                        : MemoMapTheme.lightGreen
                    )
-                   .clipShape(Capsule())
+                 .clipShape(RoundedRectangle(cornerRadius: 20))
                    .overlay {
-                       Capsule()
+                       RoundedRectangle(cornerRadius: 20)
                            .stroke(
                                selected
-                                   ? MemoMapTheme.inputBorder.opacity(1)
+                                   ? MemoMapTheme.inputBorder.opacity(0.8)
                                    : Color.clear,
                                lineWidth: 1.2
                            )

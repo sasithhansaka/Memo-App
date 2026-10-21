@@ -17,7 +17,7 @@ struct HomeView: View {
     private let columns = [
         GridItem(.flexible(), spacing: 10),
         GridItem(.flexible(), spacing: 10),
-        GridItem(.flexible()),
+//        GridItem(.flexible()),
     ]
 
     @StateObject private var viewModel = HomeViewModel()
@@ -33,6 +33,7 @@ struct HomeView: View {
                         // Add these sections when ready:
                         header
                         searchBanner
+                        nearbyMemoryCard
                         collectionBanner
                         recentlyAddedSection
 
@@ -69,21 +70,20 @@ struct HomeView: View {
         HStack(spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(greeting)
-                    .font(.system(size: 26, weight: .bold))
-                    .foregroundStyle(MemoMapTheme.black)
+                    .font(MemoFont.dmSansRegular(34))                    .foregroundStyle(MemoMapTheme.black)
 
                 Text("Your memories are waiting to be rediscovered.")
-                    .font(.system(size: 15))
+                    .font(MemoFont.dmSansRegular(15))
                     .foregroundStyle(MemoMapTheme.Textsecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer(minLength: 2)
 
-            Image("LOGO")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 76, height: 76)
+//            Image("LOGO")
+//                .resizable()
+//                .scaledToFit()
+//                .frame(width: 76, height: 76)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -100,7 +100,73 @@ struct HomeView: View {
             return "Good evening"
         }
     }
+    
+    private var nearbyMemoryCard: some View {
+        GeometryReader { geometry in
+            let cardWidth = geometry.size.width
 
+            VStack(alignment: .leading, spacing: 0) {
+
+//                Text("A memory nearby")
+//                    .font(MemoFont.dmSansSemiBold(18))
+//                    .foregroundStyle(MemoMapTheme.black)
+//                    .padding(.bottom, 16)
+
+                VStack(alignment: .leading, spacing: 0) {
+
+                    Image("university")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: cardWidth, height: 140)
+                        .clipped()
+
+                    VStack(alignment: .leading, spacing: 4) {
+
+                        Text("University Exhibition")
+                            .font(MemoFont.dmSansBold(26))
+                            .foregroundStyle(MemoMapTheme.White)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+
+                        HStack(alignment: .center, spacing: 8) {
+
+                            Text("120 m away")
+
+                            Circle()
+                                .fill(.white)
+                                .frame(width: 5, height: 5)
+
+                            Text("Sep 25, 2024")
+
+                            Spacer(minLength: 4)
+
+                            Button {
+                            } label: {
+                                Text("View memory")
+                                    .underline()
+                                    .fontWeight(.semibold)
+                                    .lineLimit(1)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        .font(MemoFont.dmSansMedium(16))
+                        .foregroundStyle(MemoMapTheme.White)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 20)
+                    .padding(.bottom,24)
+                }
+                .frame(width: cardWidth)
+                .background(MemoMapTheme.green)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            .frame(width: cardWidth, alignment: .leading)
+        }
+        .frame(height: 220)
+        .padding(.bottom, 20)
+    }
+    
+    
     private var searchBanner: some View {
         NavigationStack {
             NavigationLink {
@@ -119,11 +185,12 @@ struct HomeView: View {
                     }
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Find all memories")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(MemoFont.dmSansMedium(19))
+//                            .font(.system(size: 16, weight: .semibold))
                             .foregroundStyle(MemoMapTheme.black)
 
                         Text("Search by place, category or story")
-                            .font(.system(size: 14))
+                            .font(MemoFont.dmSansRegular(15))
                             .foregroundStyle(MemoMapTheme.Textsecondary)
                             .multilineTextAlignment(.leading)
                     }
@@ -135,13 +202,13 @@ struct HomeView: View {
 
                 }
                 .padding(.horizontal, 14)
-                .padding(.vertical, 9)
+                .padding(.vertical, 13)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(MemoMapTheme.White)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .overlay {
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(MemoMapTheme.inputBorder, lineWidth: 1)
+                        .stroke(MemoMapTheme.inputBorder, lineWidth: 0.6)
                 }
                 .contentShape(RoundedRectangle(cornerRadius: 12))
             }
@@ -149,9 +216,9 @@ struct HomeView: View {
     }
 
     private var collectionBanner: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 18) {
             Text("Your memory collection")
-                .font(.system(size: 17, weight: .semibold))
+                .font(MemoFont.dmSansSemiBold(22))
                 .foregroundStyle(MemoMapTheme.black)
 
             LazyVGrid(columns: columns, spacing: 8) {
@@ -188,14 +255,16 @@ struct HomeView: View {
                     .font(.system(size: 15))
 
                 Text(title)
-                    .font(.system(size: 13, weight: .medium))
+                    .font(MemoFont.dmSansMedium(17))
+//                    .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(MemoMapTheme.Textsecondary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }
 
             Text("\(count)")
-                .font(.system(size: 21, weight: .bold))
+                .font(MemoFont.dmSansRegular(22))
+//                .font(.system(size: 21, weight: .bold))
                 .foregroundStyle(MemoMapTheme.black)
                 .padding(.horizontal, 10)
         }
@@ -206,16 +275,16 @@ struct HomeView: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay {
             RoundedRectangle(cornerRadius: 12)
-                .stroke(MemoMapTheme.inputBorder, lineWidth: 1)
+                .stroke(MemoMapTheme.inputBorder, lineWidth: 0.6)
         }
     }
 
     private var recentlyAddedSection: some View {
 
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 20) {
             HStack {
                 Text("Recently added")
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(MemoFont.dmSansSemiBold(22))
                     .foregroundStyle(MemoMapTheme.black)
 
                 Spacer()
@@ -257,35 +326,65 @@ struct HomeView: View {
     }
 
     private func memoryCard(_ memory: Memory) -> some View {
-        HStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 7) {
+     return HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 10) {
+//                Text(memory.category)
+//                    .font(MemoFont.dmSansMedium(11))
+//                    .foregroundStyle(MemoMapTheme.green)
+//                    .padding(.horizontal, 5)
+//                    .padding(.vertical, 5)
+//                    .background(
+//                        Capsule()
+//                            .fill(MemoMapTheme.lightGreen)
+//                    )
+                
                 Text(memory.title)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(MemoFont.dmSansBold(15))
                     .foregroundStyle(MemoMapTheme.black)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
-
-                HStack(spacing: 4) {
-                    Text(
-                        memory.memoryDate,
-                        format: .dateTime
-                            .month(.abbreviated)
-                            .day()
-                            .year()
-                    )
-
-                    Text("•")
-
-                    Text(memory.placeName ?? "Location not added")
-                        .lineLimit(1)
+                
+                HStack(spacing: 6){
+                    
+                    Label {
+                        Text(
+                            memory.memoryDate,
+                            format: .dateTime
+                                .day()
+                                .month(.abbreviated)
+                                .year()
+                        )
+                    } icon: {
+                        Image(systemName: "calendar")
+                    }
+                    .font(MemoFont.dmSansRegular(12))
+                    .foregroundStyle(MemoMapTheme.Textsecondary)
+                    .lineLimit(1)
+                    
+                    Label {
+                        Text(memory.placeName ?? "Location not added")
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                    } icon: {
+                        Image(systemName: "mappin.and.ellipse")
+                    }
+                    .font(MemoFont.dmSansRegular(12))
+                    .foregroundStyle(MemoMapTheme.Textsecondary)
                 }
-                .font(.system(size: 13))
-                .foregroundStyle(MemoMapTheme.Textsecondary)
+                
+                if let description = memory.description,
+                   !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    Text(description)
+                        .font(MemoFont.dmSansMedium(14))
+                        .foregroundStyle(MemoMapTheme.Textsecondary)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 12)
-            .padding(.vertical, 12)
-
+            .padding(.leading, 16)
+            .padding(.vertical, 14)
+            
             Group {
                 if let image = MemoryImageEncoder.decode(
                     memory.coverPhotoBase64
@@ -296,24 +395,35 @@ struct HomeView: View {
                 } else {
                     ZStack {
                         //                         MemoMapTheme.inputBorder.opacity(0.3)
-
+                        
                         Image(systemName: "photo")
-                            .foregroundStyle(MemoMapTheme.Textsecondary)
-                    }
+                            .font(.system(size: 25))
+                        .foregroundStyle(MemoMapTheme.lightGreen)                    }
                 }
             }
-            .frame(width: 110, height: 78)
+            .frame(width: 120, height: 150)
             .padding(.vertical, 15)
             .clipped()
+            .clipShape(
+                UnevenRoundedRectangle(
+                    topLeadingRadius: 20,
+                    bottomLeadingRadius: 20,
+                    bottomTrailingRadius: 20,
+                    topTrailingRadius: 20
+                )
+            )
         }
-        .frame(height: 78)
+        .frame(height: 150)
+        .frame(maxWidth: .infinity)
         .background(MemoMapTheme.inputBackground)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .overlay {
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(MemoMapTheme.inputBorder, lineWidth: 0.8)
+        overlay {
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(
+                    MemoMapTheme.inputBorder.opacity(0.7),
+                    lineWidth: 0.8
+                )
         }
-        .frame(maxWidth: .infinity)
     }
 
 }
