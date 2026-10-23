@@ -74,7 +74,7 @@ struct MemoryDetailView: View {
                             .font(.system(size: 36))
                             .foregroundStyle(MemoMapTheme.Textsecondary)
                     }
-                    .frame(height: 390)
+                    .frame(height: 350)
             } else {
                 TabView(selection: $viewModel.selectedPhotoIndex) {
                     ForEach(
@@ -89,7 +89,7 @@ struct MemoryDetailView: View {
                             .tag(index)
                     }
                 }
-                .frame(width: width, height: 390)
+                .frame(width: width, height: 350)
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
 
@@ -98,12 +98,14 @@ struct MemoryDetailView: View {
                     dismiss()
                 } label: {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 19, weight: .semibold))
-                        .foregroundStyle(.black)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(MemoMapTheme.green.opacity(0.9))
                         .frame(width: 44, height: 44)
-                        .background(.white.opacity(0.95))
+                        .background(MemoMapTheme.White.opacity(0.6))
                         .clipShape(Circle())
+                        .padding(.top,5)
                 }
+                .buttonStyle(.plain)
                 .accessibilityLabel("Go back")
 
                 Spacer()
@@ -168,43 +170,44 @@ struct MemoryDetailView: View {
                     }
                     .padding(.bottom, 22)
                 }
-                .frame(height: 390)
+                .frame(height: 350)
                 .allowsHitTesting(false)
             }
         }
-        .frame(width: width, height: 390)
+        .frame(width: width, height: 350)
     }
 
     private var memoryContent: some View {
         VStack(alignment: .leading, spacing: 0) {
 
             Text(viewModel.memory.title)
-                .font(MemoFont.dmSansBold(30))
+                .font(MemoFont.dmSansBold(18))
                 .foregroundStyle(MemoMapTheme.black)
                 .fixedSize(horizontal: false, vertical: true)
 
             HStack(alignment: .top, spacing: 8) {
 //                Text(viewModel.formattedDate)
 
-                Text("•")
-
+                Image(systemName: "map.fill")
+                    .font(.system(size: 11))
+                
                 Text(viewModel.locationText)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .font(MemoFont.dmSansMedium(15))
             .foregroundStyle(MemoMapTheme.Textsecondary)
-            .padding(.top, 8)
+            .padding(.top, 12)
 
             if let description = viewModel.memory.description,
                !description.trimmingCharacters(
                     in: .whitespacesAndNewlines
                ).isEmpty {
                 Text(description)
-                    .font(MemoFont.dmSansRegular(19))
-                    .foregroundStyle(MemoMapTheme.black)
+                    .font(MemoFont.dmSansRegular(15))
+                    .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.8))
                     .fixedSize(horizontal: false, vertical: true)
                     .lineSpacing(3)
-                    .padding(.top, 30)
+                    .padding(.top, 15)
             }
 
             ScrollView(.horizontal, showsIndicators: false) {
@@ -216,13 +219,13 @@ struct MemoryDetailView: View {
                     }
                 }
                 .font(MemoFont.dmSansMedium(14))
-                .foregroundStyle(MemoMapTheme.Textsecondary)
+                .foregroundStyle(MemoMapTheme.green.opacity(1))
             }
-            .padding(.top, 28)
+            .padding(.top, 10)
         }
-        .padding(.horizontal, 28)
-        .padding(.top, 40)
-        .padding(.bottom, 40)
+        .padding(.horizontal, 16)
+        .padding(.top, 30)
+        .padding(.bottom, 30)
         .frame(maxWidth: 520, alignment: .leading)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {

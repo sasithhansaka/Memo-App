@@ -57,6 +57,12 @@ final class HomeViewModel : ObservableObject {
         memories.count
     }
     
+    public var photosCount: Int {
+        memories.reduce(0) { total, memory in
+            total + (memory.photoBase64?.count ?? 0)
+        }
+    }
+    
     public var recentMemoryCount: Int {
         let threeMonthsAgo = Calendar.current.date(
                byAdding: .month,

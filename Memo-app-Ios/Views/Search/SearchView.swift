@@ -4,7 +4,6 @@
 //
 //  Created by student3 on 2026-10-19.
 //
-
 import Combine
 import Foundation
 import SwiftUI
@@ -31,9 +30,7 @@ struct SearchView: View {
 
                         FilterSection
                     }
-//                    .padding(.horizontal, 18)
-//                    .padding(.top, 16)
-//                    .padding(.bottom, 14)
+                    
                     .frame(maxWidth: 520)
                     .frame(maxWidth: .infinity)
 
@@ -74,60 +71,62 @@ struct SearchView: View {
         }
 //        .ignoresSafeArea(edges: .top)
 
-        .navigationBarBackButtonHidden(true)
-
+         .background {
+            MemoMapTheme.background
+                .ignoresSafeArea()
+        }
+         .navigationBarBackButtonHidden(true)
+         .toolbarBackground(.hidden, for: .navigationBar)
+        .tint(MemoMapTheme.green)
         .onAppear {
             viewModel.startListening()
         }
         .onDisappear {
             viewModel.stopListening()
-        }
+}
 
     }
     
 
     private var header: some View {
-        
-        HStack(spacing: 10) {
-            VStack(alignment: .leading, spacing: 4) {
-                
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(MemoMapTheme.black)
-                        .frame(width: 30, height: 30)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                
-                
-                    Text("Search memories")
-                    .font(MemoFont.dmSansRegular(34))                    .foregroundStyle(MemoMapTheme.black)
+        HStack(alignment: .top, spacing: 12) {
 
-                    Text("Find a memory by its story, place or date.")
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(MemoMapTheme.green.opacity(0.9))
+                    .frame(width: 44, height: 44)
+                    .background(MemoMapTheme.White.opacity(0.6))
+                    .clipShape(Circle())
+                    .padding(.top,5)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Go back")
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Search memories")
+                    .font(MemoFont.dmSansRegular(30))
+                    .foregroundStyle(MemoMapTheme.black)
+
+                Text("Find a memory by its story, place or date.")
                     .font(MemoFont.dmSansRegular(15))
                     .foregroundStyle(MemoMapTheme.Textsecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(.bottom , 10)
-            Spacer(minLength: 2)
-            
+            .padding(.top, 2)
 
-//            Image("LOGO")
-//                .resizable()
-//                .scaledToFit()
-//                .frame(width: 76, height: 76)
+            Spacer(minLength: 0)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        
+        .padding(.bottom, 10)
     }
 
     private var searchBar: some View {
-        HStack() {
-        Image("search")
-                .font(.system(size: 16, weight: .medium))
+        HStack(spacing: 10) {
+        Image(systemName: "magnifyingglass")
+                .font(.system(size: 19, weight: .medium))
                 .foregroundStyle(MemoMapTheme.Textsecondary)
         
         
@@ -135,10 +134,26 @@ struct SearchView: View {
             "Search memories..",
             text: $viewModel.searchText
         )
-        .font(.system(size: 13))
+        .font(MemoFont.dmSansRegular(17))
+        .foregroundStyle(MemoMapTheme.black)
         .autocorrectionDisabled()
         .textInputAutocapitalization(.never)
         .submitLabel(.search)
+
+
+         if !viewModel.searchText.isEmpty {
+            Button {
+                viewModel.searchText = ""
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 20))
+                    .foregroundStyle(
+                        MemoMapTheme.Textsecondary.opacity(0.65)
+                    )
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Clear search")
+        }
 
         }
         .padding(.horizontal, 14)
@@ -157,15 +172,13 @@ struct SearchView: View {
     private var FilterSection: some View {
 
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
+            HStack(spacing: 10) {
                 ForEach(viewModel.categories, id: \.self) { category in
                     Categorychip(category)
                 }
             }
-//            .padding(.vertical, 0)
-//            .padding(.horizontal, 1)
-            .padding(.top ,8)
-            .padding(.bottom ,20)
+           .padding(.vertical, 1)
+           .padding(.horizontal, 6)
             
         }
     }
@@ -177,28 +190,60 @@ struct SearchView: View {
         return Button {
             viewModel.selectedCategory(category)
         } label: {
+             HStack(spacing: 7) {
+            if let symbol = categorySymbol(for: category) {
+                Image(systemName: symbol)
+                    .font(.system(size: 14, weight: .semibold))
+            }
+
             Text(category)
-                .font(.system(size: 13, weight: .medium))
-                   .foregroundStyle(
-                       MemoMapTheme.green
-                   )
-                   .padding(.horizontal, 15)
-                   .frame(height: 36)
-                   .background(
-                       selected
-                       ? MemoMapTheme.lightGreen
-                       : MemoMapTheme.lightGreen
-                   )
-                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                   .overlay {
-                       RoundedRectangle(cornerRadius: 20)
-                           .stroke(
-                               selected
-                                   ? MemoMapTheme.inputBorder.opacity(0.8)
-                                   : Color.clear,
-                               lineWidth: 1.2
-                           )
-                   }
+                .font(MemoFont.dmSansMedium(16))
+                .fixedSize()
+            }
+
+            .foregroundStyle(
+            selected ? Color.white : MemoMapTheme.green
+            )
+            .padding(.horizontal, 16)
+            .frame(height: 42)
+            .background {
+                Capsule()
+                    .fill(
+                        selected
+                            ? MemoMapTheme.green
+                            : Color.white.opacity(0.55)
+                    )
+            }
+            .overlay {
+                Capsule()
+                    .stroke(
+                        selected
+                            ? MemoMapTheme.green
+                            : MemoMapTheme.inputBorder.opacity(0.45),
+                        lineWidth: 1
+                    )
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(selected ? .isSelected : [])
+    }
+
+    private func categorySymbol(for category: String) -> String? {
+        switch category {
+        case "All":
+            return nil
+        case "Travels":
+            return "airplane"
+        case "Family":
+            return "house"
+        case "University & Education":
+            return "graduationcap"
+        case "Friends":
+            return "person.2"
+        case "Other":
+            return "square.grid.2x2"
+        default:
+            return nil
         }
     }
 

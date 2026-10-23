@@ -15,6 +15,7 @@ struct ProfileView: View {
     @StateObject private var appLock = AppLockManager.shared
     @State private var showFaceIDError = false
     @State private var faceIDErrorMessage = ""
+    @State private var showLogoutConfirmation = false
 
 
     var body: some View {
@@ -30,7 +31,7 @@ struct ProfileView: View {
                     
                     VStack(spacing: 0) {
                         
-                        sectionHeading("PERSONAL DETAILS")
+                        sectionHeading("PERSONAL INFORMATIONS")
 
                         detailRow(
                             title: "Full name",
@@ -119,36 +120,31 @@ struct ProfileView: View {
                         }
                         .buttonStyle(.plain)
                         .padding(.vertical, 20)
-                        
-                        divider
 
-                      // OTHER
-                      sectionHeading("OTHER")
-                          .padding(.top, 24)
-                        
                         Button {
-                            
-                            appLock.resetForLogout()
-                            auth.logout()
-                            
+                            showLogoutConfirmation = true
                         } label: {
-                            HStack {
-                                Text("Log out")
-                                   .font(MemoFont.dmSansMedium(16))
-                                   .foregroundStyle(MemoMapTheme.black)
-
-                               Spacer()
-
-                                Spacer()
-
-                            Image(systemName: "rectangle.portrait.and.arrow.right")
-                                .font(.system(size: 16))
-                                .foregroundStyle(MemoMapTheme.Textsecondary)
+                            Text("Logout")
+                                .font(MemoFont.dmSansMedium(17))
+                                .foregroundStyle(MemoMapTheme.green)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 50)
+                                .background {
+                                    Capsule()
+                                        .fill(MemoMapTheme.background)
                                 }
-                            .padding(.vertical, 20)
-                            .contentShape(Rectangle())
-                            }
-                            .buttonStyle(.plain)
+                                .overlay {
+                                    Capsule()
+                                        .stroke(
+                                            MemoMapTheme.green.opacity(0.85),
+                                            lineWidth: 1
+                                        )
+                                }
+                                .contentShape(Capsule())
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.top, 20)
+                        .accessibilityHint("Double-tap to log out of your account")
                         }
 
                         Spacer(minLength: 30)
@@ -171,13 +167,28 @@ struct ProfileView: View {
         } message: {
             Text(faceIDErrorMessage)
         }
+        .alert(
+            "Log Out?",
+            isPresented: $showLogoutConfirmation
+        ) {
+            Button("Cancel", role: .cancel) {
+            }
+
+            Button("Log Out", role: .destructive) {
+                appLock.resetForLogout()
+                auth.logout()
+            }
+        } message: {
+            Text("Are you sure you want to log out of your account?")
+        }
     }
     
     private var header: some View {
         HStack(spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Account")
-                    .font(MemoFont.dmSansRegular(34))                    .foregroundStyle(MemoMapTheme.black)
+                    .font(MemoFont.dmSansRegular(34))
+                    .foregroundStyle(MemoMapTheme.black)
 
                 Text("Your memories are waiting to be rediscovered.")
                     .font(MemoFont.dmSansRegular(15))
@@ -186,11 +197,6 @@ struct ProfileView: View {
             }
 
             Spacer(minLength: 2)
-
-//            Image("LOGO")
-//                .resizable()
-//                .scaledToFit()
-//                .frame(width: 76, height: 76)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.bottom ,24)
@@ -224,12 +230,6 @@ struct ProfileView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 20)
     }
-
-//    private func logout() {
-//        appLock.resetForLogout()
-//
-//        auth.logout()
-//    }
     
     private var divider: some View {
         Rectangle()

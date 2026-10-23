@@ -6,69 +6,58 @@
 //
 //
 
-
 import SwiftUI
 
 struct TimelineView: View {
     @StateObject private var viewModel = TimelineViewModel()
 
+    @State private var selectedYear: Int? = nil
+    @State private var expandedDescriptions: Set<String> = []
+
+
+    private var availableYears: [Int] {
+        viewModel.groupedYears.map(\.year)
+    }
+
+    private var visibleSections: [(year: Int, memories: [Memory])] {
+        viewModel.groupedYears.filter { section in
+            selectedYear == nil || section.year == selectedYear
+        }
+    }
+
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                Image("timeline-bg")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(
-                        width: geometry.size.width,
-                        height: geometry.size.height
-                    )
-                    .clipped()
-                    .ignoresSafeArea()
+        ZStack {
 
-                VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 22) {
+                    header
 
+                    yearFilters
 
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .leading, spacing: 28) {
-                            header
-
-                            if viewModel.isLoading {
-                                loadingView
-                            } else if let error = viewModel.errorMessage {
-                                errorView(error)
-                            } else if viewModel.memories.isEmpty {
-                                emptyView
-                            } else {
-                                ForEach(
-                                    viewModel.groupedYears,
-                                    id: \.year
-                                ) { section in
-                                    yearSection(
-                                        year: section.year,
-                                        memories: section.memories
-                                    )
-                                }
+                    if viewModel.isLoading {
+                        loadingView
+                    } else if let error = viewModel.errorMessage {
+                        errorView(error)
+                    } else if viewModel.memories.isEmpty {
+                        emptyView
+                    } else if visibleSections.isEmpty {
+                        emptyFilterView
+                    } else {
+                        VStack(alignment: .leading, spacing: 24) {
+                            ForEach(visibleSections, id: \.year) { section in
+                                yearSection(
+                                    year: section.year,
+                                    memories: section.memories
+                                )
                             }
                         }
-                        .padding(.horizontal, 15)
-                        .padding(.top, 20)
-                        .padding(.bottom, 24)
-                        .frame(maxWidth: 520)
-                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
                 }
-                .frame(
-                    width: geometry.size.width,
-                    height: geometry.size.height,
-                    alignment: .top
-                )
+                .padding(.top, 16)
+                .padding(.bottom, 30)
+                .frame(maxWidth: 520)
+                .frame(maxWidth: .infinity)
             }
-            .frame(
-                width: geometry.size.width,
-                height: geometry.size.height
-            )
-            .clipped()
         }
         .onAppear {
             viewModel.startListening()
@@ -78,59 +67,125 @@ struct TimelineView: View {
         }
     }
 
-
     private var header: some View {
-        
         HStack(spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Timeline")
-                    .font(.system(size: 26, weight: .bold))
+                    .font(MemoFont.dmSansRegular(34))
                     .foregroundStyle(MemoMapTheme.black)
 
-                Text("A chronological view of your life.")
-                    .font(.system(size: 15))
+                Text("Your memories, organized by time.")
+                    .font(MemoFont.dmSansRegular(15))
                     .foregroundStyle(MemoMapTheme.Textsecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer(minLength: 2)
 
-            Image("LOGO")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 76, height: 76)
+//            Image("LOGO")
+//                .resizable()
+//                .scaledToFit()
+//                .frame(width: 76, height: 76)
         }
+        .padding(.horizontal, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var yearFilters: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                yearChip(title: "All", year: nil)
+
+                ForEach(availableYears, id: \.self) { year in
+                    yearChip(title: String(year), year: year)
+                }
+            }
+            .padding(.vertical, 3)
+            .padding(.horizontal, 16)
+
+        }
+    }
+
+    private func yearChip(
+        title: String,
+        year: Int?
+    ) -> some View {
+        let isSelected = selectedYear == year
+
+        return Button {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                selectedYear = year
+            }
+        } label: {
+            Text(title)
+                .font(MemoFont.dmSansMedium(14))
+                .foregroundStyle(
+                    isSelected ? MemoMapTheme.White : MemoMapTheme.green
+                )
+                .frame(minWidth: 76)
+                .frame(height: 42)
+                .background {
+                    Capsule()
+                        .fill(
+                            isSelected
+                                ? MemoMapTheme.green
+                                : Color.white.opacity(0.45)
+                        )
+                }
+                .overlay {
+                    Capsule()
+                        .stroke(
+                            isSelected
+                                ? Color.clear
+                                : MemoMapTheme.inputBorder.opacity(0.8),
+                            lineWidth: 1
+                        )
+                }
+        }
+        .buttonStyle(.plain)
     }
 
     private func yearSection(
         year: Int,
         memories: [Memory]
     ) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(String(year))
-                .font(.system(size: 24, weight: .regular))
-                .foregroundStyle(MemoMapTheme.black)
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(String(year))
+                    .font(MemoFont.dmSansBold(23))
+                    .foregroundStyle(MemoMapTheme.black)
 
-            ForEach(Array(memories.enumerated()), id: \.element.id) {
-                index, memory in
+                Text("\(memories.count) memories")
+                    .font(MemoFont.dmSansRegular(13))
+                    .foregroundStyle(MemoMapTheme.Textsecondary)
 
-                memoryRow(memory)
+                Spacer()
+            }
+            .padding(.horizontal, 16)
 
-                if index < memories.count - 1 {
-                    Rectangle()
-                        .fill(MemoMapTheme.inputBorder)
-                        .frame(height: 1)
-                        .padding(.top, 4)
+
+            VStack(spacing: 16) {
+                ForEach(memories) { memory in
+                    memoryFeedCard(memory)
                 }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
+    private func memoryFeedCard(_ memory: Memory) -> some View {
+        VStack(alignment: .leading, spacing: 20) {
+            memoryHeader(memory)
 
-    private func memoryRow(_ memory: Memory) -> some View {
-        HStack(alignment: .top, spacing: 14) {
+            memoryPhotoCarousel(memory)
+
+            descriptionSection(memory)
+        }
+
+    }
+
+    private func memoryHeader(_ memory: Memory) -> some View {
+        HStack(alignment: .center, spacing: 10) {
             Group {
                 if let image = MemoryImageEncoder.decode(
                     memory.coverPhotoBase64
@@ -139,94 +194,140 @@ struct TimelineView: View {
                         .resizable()
                         .scaledToFill()
                 } else {
-                    ZStack {
-                        MemoMapTheme.background
-
-                        Image(systemName: "photo")
-                            .font(.system(size: 27))
-                            .foregroundStyle(
-                                MemoMapTheme.Textsecondary
-                            )
-                    }
+                    Circle()
+                        .fill(MemoMapTheme.lightGreen)
+                        .overlay {
+                            Image(systemName: "photo")
+                                .foregroundStyle(MemoMapTheme.green)
+                        }
                 }
             }
-            .frame(width: 90, height: 90)
-            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .frame(width: 48, height: 48)
+            .clipShape(Circle())
 
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 5) {
                 Text(memory.title)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(MemoFont.dmSansBold(15))
                     .foregroundStyle(MemoMapTheme.black)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
+                    .lineLimit(1)
 
-                HStack(alignment: .top, spacing: 5) {
+                HStack(spacing: 5) {
                     Text(
                         memory.memoryDate,
-                        format: .dateTime.month(.abbreviated).day()
+                        format: .dateTime
+                            .month(.abbreviated)
+                            .day()
+                            .year()
                     )
 
-                    Text("•")
+                    Text("·")
+
+                    Image(systemName: "map.fill")
+                        .font(.system(size: 11))
 
                     Text(
                         memory.placeName?.isEmpty == false
                             ? memory.placeName!
                             : "Location not added"
                     )
-                    .lineLimit(2)
+                    .lineLimit(1)
                 }
-                .font(.system(size: 14))
+                .font(MemoFont.dmSansRegular(12))
                 .foregroundStyle(MemoMapTheme.Textsecondary)
-
-                if let ocr = memory.ocrtext {
-                    let tags = makeTags(from: ocr)
-
-                    if !tags.isEmpty {
-                        Text(
-                            tags.map { "#\($0)" }
-                                .joined(separator: " ")
-                        )
-                        .font(.system(size: 12))
-                        .foregroundStyle(MemoMapTheme.Textsecondary)
-                        .lineLimit(2)
-                        .fixedSize(
-                            horizontal: false,
-                            vertical: true
-                        )
-                    }
-                }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 4)
+
+            Spacer(minLength: 0)
         }
-        .padding(.bottom, 6)
+        .padding(.horizontal, 16)
+
+
+    }
+
+
+    private func memoryPhotoCarousel(_ memory: Memory) -> some View {
+        Group {
+            if let image = MemoryImageEncoder.decode(
+                memory.coverPhotoBase64
+            ) {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 295)
+                    .clipped()
+                    .clipShape(RoundedRectangle(cornerRadius: 0))
+            } else {
+                ZStack {
+                    MemoMapTheme.lightGreen
+
+                    Image(systemName: "photo")
+                        .font(.system(size: 36))
+                        .foregroundStyle(MemoMapTheme.green)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 295)
+                .clipShape(RoundedRectangle(cornerRadius: 0))
+            }
+        }
+    }
+
+    private func descriptionSection(_ memory: Memory) -> some View {
+        let key = String(describing: memory.id)
+        let isExpanded = expandedDescriptions.contains(key)
+        let description = memory.description ?? ""
+        let characterLimit = 100
+
+        return (
+            Text(memory.title + " ")
+                .font(MemoFont.dmSansBold(14))
+                .foregroundColor(MemoMapTheme.black)
+
+            +
+            
+            Text(
+                isExpanded || description.count <= characterLimit
+                    ? description
+                    : String(description.prefix(characterLimit)) + "... "
+            )
+            .font(MemoFont.dmSansRegular(14))
+            .foregroundColor(MemoMapTheme.Textsecondary.opacity(0.9))
+
+            +
+
+            (
+                description.count > characterLimit && !isExpanded
+                    ? Text("more")
+                        .font(MemoFont.dmSansMedium(12))
+                        .foregroundColor(MemoMapTheme.Textsecondary.opacity(0.7))
+                    : Text("")
+            )
+        )
+        .fixedSize(horizontal: false, vertical: true)
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 16)
+        .padding(.bottom, 20)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            guard description.count > characterLimit, !isExpanded else {
+                return
+            }
+
+            var transaction = Transaction()
+            transaction.animation = nil
+
+            withTransaction(transaction) {
+                expandedDescriptions.insert(key)
+            }
+        }
     }
 
-    private func makeTags(from text: String) -> [String] {
-        var seen = Set<String>()
-
-        return text
-            .components(separatedBy: .whitespacesAndNewlines)
-            .map {
-                $0.trimmingCharacters(
-                    in: CharacterSet.alphanumerics.inverted
-                )
-            }
-            .filter { $0.count >= 3 }
-            .filter {
-                seen.insert($0.lowercased()).inserted
-            }
-            .prefix(4)
-            .map { $0 }
-    }
 
     private var loadingView: some View {
         VStack(spacing: 12) {
             ProgressView()
 
             Text("Loading your memories...")
-                .font(.system(size: 14))
+                .font(MemoFont.dmSansRegular(14))
                 .foregroundStyle(MemoMapTheme.Textsecondary)
         }
         .frame(maxWidth: .infinity)
@@ -237,19 +338,27 @@ struct TimelineView: View {
         VStack(spacing: 12) {
             Image(systemName: "clock")
                 .font(.system(size: 36))
-                .foregroundStyle(MemoMapTheme.Textsecondary)
+                .foregroundStyle(MemoMapTheme.green)
 
             Text("Your timeline starts here")
-                .font(.system(size: 19, weight: .semibold))
+                .font(MemoFont.dmSansBold(19))
                 .foregroundStyle(MemoMapTheme.black)
 
             Text("Memories you save will appear here, grouped by year.")
-                .font(.system(size: 13))
+                .font(MemoFont.dmSansRegular(14))
                 .foregroundStyle(MemoMapTheme.Textsecondary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 40)
+    }
+
+    private var emptyFilterView: some View {
+        Text("No memories found for this year.")
+            .font(MemoFont.dmSansRegular(14))
+            .foregroundStyle(MemoMapTheme.Textsecondary)
+            .frame(maxWidth: .infinity)
+            .padding(.top, 35)
     }
 
     private func errorView(_ message: String) -> some View {
@@ -259,7 +368,7 @@ struct TimelineView: View {
                 .foregroundStyle(MemoMapTheme.Textsecondary)
 
             Text(message)
-                .font(.system(size: 14))
+                .font(MemoFont.dmSansRegular(14))
                 .foregroundStyle(MemoMapTheme.black)
                 .multilineTextAlignment(.center)
 
@@ -267,7 +376,7 @@ struct TimelineView: View {
                 viewModel.stopListening()
                 viewModel.startListening()
             }
-            .foregroundStyle(MemoMapTheme.black)
+            .foregroundStyle(MemoMapTheme.green)
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 40)
