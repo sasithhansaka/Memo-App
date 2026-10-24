@@ -140,7 +140,7 @@ struct HomeView: View {
                         Spacer()
 
                         HStack(spacing: 7) {
-                            Text("Create a memory")
+                            Text("Create memory")
                                 .font(MemoFont.dmSansSemiBold(15))
 
                             Image(systemName: "book.closed.fill")

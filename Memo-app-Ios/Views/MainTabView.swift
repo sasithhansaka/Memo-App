@@ -98,7 +98,6 @@ struct MainTabView: View {
         }
     }
 
-
     private func navigationItem(
         tab: Tabs,
         title: String,

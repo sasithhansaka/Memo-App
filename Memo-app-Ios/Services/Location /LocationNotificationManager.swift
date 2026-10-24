@@ -26,6 +26,9 @@ final class LocationNotificationManager: NSObject,
 
     private var memoryListener: ListenerRegistration?
     private var processingMemoryIDs = Set<String>()
+    
+    private var locationPermissionCompletion: ((String?) -> Void)?
+    private var shouldRequestAlwaysAfterWhenInUse = false
 
     private let radius: CLLocationDistance = 1000
     private let maximumRegions = 20
@@ -36,41 +39,22 @@ final class LocationNotificationManager: NSObject,
     }
 
     func start() {
-        
-        func start() {
-            print("📍 LocationNotificationManager started")
+        print("LocationNotificationManager started")
 
-            print(
-                "📍 Location authorization:",
-                locationManager.authorizationStatus.rawValue
+        print(
+            "Location authorization:",
+            locationManager.authorizationStatus.rawValue
+        )
+
+        print(
+            "Region monitoring available:",
+            CLLocationManager.isMonitoringAvailable(
+                for: CLCircularRegion.self
             )
+        )
 
-            print(
-                "📍 Region monitoring available:",
-                CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self)
-            )
-
-            requestNotificationPermission()
-
-            // Keep the rest of your existing start() implementation.
-        }
-        requestNotificationPermission()
-
-        switch locationManager.authorizationStatus {
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
-
-        case .authorizedWhenInUse:
-            print("When In Use permission already granted.")
-
-        case .authorizedAlways:
+        if locationManager.authorizationStatus == .authorizedAlways {
             startListeningForMemories()
-
-        case .denied, .restricted:
-            print("Location permission is denied or restricted.")
-
-        @unknown default:
-            break
         }
     }
 
@@ -87,22 +71,100 @@ final class LocationNotificationManager: NSObject,
             }
         }
     }
+    
+    func requestLocationPermission(
+        completion: @escaping (String?) -> Void
+    ) {
+        locationPermissionCompletion = completion
+
+        switch locationManager.authorizationStatus {
+
+        case .notDetermined:
+            shouldRequestAlwaysAfterWhenInUse = true
+            locationManager.requestWhenInUseAuthorization()
+
+        case .authorizedWhenInUse:
+            locationManager.requestAlwaysAuthorization()
+
+        case .authorizedAlways:
+            startListeningForMemories()
+            locationPermissionCompletion = nil
+            completion(nil)
+
+        case .denied:
+            locationPermissionCompletion = nil
+            completion(
+                "Location access is disabled. Enable it in Settings "
+                + "to use location-based memory reminders."
+            )
+
+        case .restricted:
+            locationPermissionCompletion = nil
+            completion(
+                "Location access is restricted on this device."
+            )
+
+        @unknown default:
+            locationPermissionCompletion = nil
+            completion(
+                "Unable to determine your location permission status."
+            )
+        }
+    }
 
     func locationManagerDidChangeAuthorization(
         _ manager: CLLocationManager
     ) {
         switch manager.authorizationStatus {
+
         case .authorizedAlways:
+            shouldRequestAlwaysAfterWhenInUse = false
             startListeningForMemories()
 
+            let completion = locationPermissionCompletion
+            locationPermissionCompletion = nil
+            completion?(nil)
+
         case .authorizedWhenInUse:
-            // Do not request Always permission every time this callback runs.
-            // Request it through a deliberate onboarding step.
             print("Location authorized while using the app.")
 
-        case .denied, .restricted:
-            print("Location permission denied or restricted.")
+            if shouldRequestAlwaysAfterWhenInUse {
+                shouldRequestAlwaysAfterWhenInUse = false
+
+                // Background location reminders require Always access.
+                manager.requestAlwaysAuthorization()
+            } else {
+                let completion = locationPermissionCompletion
+                locationPermissionCompletion = nil
+
+                completion?(
+                    "Location access is enabled while using the app. "
+                    + "For background memory reminders, allow Always "
+                    + "access in Settings if iOS offers that option."
+                )
+            }
+
+        case .denied:
+            shouldRequestAlwaysAfterWhenInUse = false
             stopListeningAndMonitoring()
+
+            let completion = locationPermissionCompletion
+            locationPermissionCompletion = nil
+
+            completion?(
+                "Location access was denied. You can enable it later "
+                + "in your iPhone Settings."
+            )
+
+        case .restricted:
+            shouldRequestAlwaysAfterWhenInUse = false
+
+            let completion = locationPermissionCompletion
+            locationPermissionCompletion = nil
+
+            completion?(
+                "Location access is restricted on this device."
+            )
 
         case .notDetermined:
             break
@@ -111,6 +173,8 @@ final class LocationNotificationManager: NSObject,
             break
         }
     }
+    
+    
     private func startListeningForMemories() {
         guard memoryListener == nil else { return }
 

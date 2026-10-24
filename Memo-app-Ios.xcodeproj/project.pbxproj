@@ -287,8 +287,8 @@
 				INFOPLIST_FILE = "Memo-app-Ios/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID protects your private memories in Memo.";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Memo monitors saved memory locations to notify you when you return.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Memo uses your location to help you revisit saved memories.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Memo app uses background location access to remind you about memories when you return to saved places.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Memo app uses your location to recognize places connected to your saved memories.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "App using microphone";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "App converts your speech into text for memory descriptions.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -331,8 +331,8 @@
 				INFOPLIST_FILE = "Memo-app-Ios/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID protects your private memories in Memo.";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Memo monitors saved memory locations to notify you when you return.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Memo uses your location to help you revisit saved memories.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Memo app uses background location access to remind you about memories when you return to saved places.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Memo app uses your location to recognize places connected to your saved memories.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "App using microphone";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "App converts your speech into text for memory descriptions.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

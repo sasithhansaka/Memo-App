@@ -6,6 +6,7 @@ struct LoginView: View {
 
     @State private var email = ""
     @State private var password = ""
+    @State private var isPasswordVisible = false
 
     var body: some View {
 
@@ -19,173 +20,230 @@ struct LoginView: View {
 
                     VStack(alignment: .leading, spacing: 0) {
                         
-                        VStack(spacing: 0) {
+                        VStack(spacing: 10) {
 
                             Image("LOGO")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(
-                                    width: 150,
-                                    height: 150
-                                )
+                                .frame(width: 150,height: 150)
+                                .accessibilityLabel("MemoMap logo")
                             
-//                            Text("MEMOMAP")
-//                                .font(.system(size: 11, weight: .semibold))
-//                                .foregroundStyle(MemoMapTheme.green)
-//                                .padding(.top, -2)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.top, 90)
+                        .padding(.top, 65)
 
-                        VStack(alignment: .leading, spacing: 5) {
+                        VStack(alignment: .leading, spacing: 8) {
 
                             Text("Welcome back")
-                                .font(.system(size: 28, weight: .bold))
+                                .font(MemoFont.dmSansBold(28))
                                 .foregroundStyle(MemoMapTheme.black)
 
-                            Text("Unlock your memories.")
-                                .font(.system(size: 14))
-                                .foregroundStyle(MemoMapTheme.Textsecondary)
                         }
-                        .padding(.top, 12)
+                        .padding(.top, 30)
+                        .padding(.bottom ,25)
 
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing:11) {
 
-                            Text("Email")
-                                .font(
-                                    .system(
-                                        size:12,
-                                        weight: .medium
-                                    )
-                                )
-                                .foregroundStyle(
-                                    MemoMapTheme.Textsecondary
-                                )
+                            Text("Email adress")
+                                .font(MemoFont.dmSansMedium(14))
+                                .foregroundStyle(MemoMapTheme.black)
 
-                            TextField("you@example.com", text: $email)
-                                .font(.system(size: 13))
-                                .textContentType(.emailAddress)
-                                .textInputAutocapitalization(.never)
-                                .keyboardType(.emailAddress)
-                                .autocorrectionDisabled()
-                                .padding(.horizontal, 14)
-                                .frame(height: 42)
-                                .background(MemoMapTheme.inputBackground)
-                                .clipShape(RoundedRectangle(cornerRadius: 13))
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 13)
-                                        .stroke(
-                                            MemoMapTheme.inputBorder,
-                                            lineWidth: 1
-                                        )
-                                }
-                        }
-                        .padding(.top, 24)
+                            HStack(spacing: 11) {
 
-                        VStack(alignment: .leading, spacing: 8) {
+                               Image(systemName: "envelope")
+                                   .font(.system(size: 16))
+                                   .foregroundStyle(MemoMapTheme.green)
+                                   .frame(width: 20)
 
+                               TextField(
+                                   "you@example.com",
+                                   text: $email
+                               )
+                               .font(MemoFont.dmSansRegular(14))
+                               .foregroundStyle(MemoMapTheme.black)
+//                               .textContentType(.emailAddress)
+                               .textInputAutocapitalization(.never)
+                               .keyboardType(.emailAddress)
+                               .autocorrectionDisabled()
+                               .submitLabel(.next)
+                           }
+                           .padding(.horizontal, 15)
+                           .frame(height: 52)
+                           .background(MemoMapTheme.inputBackground)
+                           .clipShape(
+                               RoundedRectangle(cornerRadius: 12)
+                           )
+                           .overlay {
+                               RoundedRectangle(cornerRadius: 12)
+                                   .stroke(
+                                       MemoMapTheme.inputBorder,
+                                       lineWidth: 0.7
+                                   )
+                           }
+                       }
+
+                        VStack(alignment: .leading, spacing: 9) {
+                            
                             Text("Password")
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(MemoMapTheme.Textsecondary)
+                            .font(MemoFont.dmSansMedium(14))
+                            .foregroundStyle(MemoMapTheme.black)
 
-                            SecureField("••••••••••", text: $password)
-                                .font(.system(size: 13))
-                                .textContentType(.password)
-                                .padding(.horizontal, 14)
-                                .frame(height: 42)
-                                .background(MemoMapTheme.inputBackground)
-                                .clipShape(RoundedRectangle(cornerRadius: 13))
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 13)
-                                        .stroke(
-                                            MemoMapTheme.inputBorder,
-                                            lineWidth: 1
-                                        )
-                                }
-                        }
-                        .padding(.top, 22)
 
-                        if !auth.errormessage.isEmpty {
-                            Text(auth.errormessage)
-                                .font(.system(size: 12))
-                                .foregroundStyle(.red)
-                                .padding(.top, 12)
-                        }
+                            HStack(spacing: 11) {
 
-                        Button {
-                            Task {
-                                await auth.login(
-                                    email: email,
-                                    password: password
-                                )
-                            }
-                        } label: {
+                           Image(systemName: "lock")
+                               .font(.system(size: 16))
+                               .foregroundStyle(MemoMapTheme.green)
+                               .frame(width: 20)
 
-                            Group {
-                                if auth.isLoading {
-                                    ProgressView()
-                                        .tint(.white)
-                                } else {
-                                    Text("Sign In")
-                                }
-                            }
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 40)
-                            .background(MemoMapTheme.green)
-                            .clipShape(Capsule())
-                        }
-                        .buttonStyle(.plain)
-                        .disabled(auth.isLoading)
-                        .padding(.top, 39)
+                           Group {
+                               if isPasswordVisible {
+                                   TextField(
+                                       "Enter your password",
+                                       text: $password
+                                   )
+                               } else {
+                                   SecureField(
+                                       "Enter your password",
+                                       text: $password
+                                   )
+                               }
+                           }
+                           .font(MemoFont.dmSansRegular(14))
+                           .foregroundStyle(MemoMapTheme.black)
+                           .textContentType(.password)
+                           .textInputAutocapitalization(.never)
+                           .autocorrectionDisabled()
+                           .submitLabel(.go)
+                           .onSubmit {
+                               signIn()
+                           }
 
-                        HStack(spacing: 4) {
-                            
-                            Text("New here?")
-                            
-                            NavigationLink {
-                                RegisterView()
-                            } label: {
-                            Text("Create account")
-                                .foregroundStyle(MemoMapTheme.green)
-                            }
-                        }
+                           Button {
+                               isPasswordVisible.toggle()
+                           } label: {
+                               Image(
+                                   systemName: isPasswordVisible
+                                       ? "eye.slash"
+                                       : "eye"
+                               )
+                               .font(.system(size: 15))
+                               .foregroundStyle(
+                                   MemoMapTheme.Textsecondary
+                               )
+                           }
+                           .buttonStyle(.plain)
+                           .accessibilityLabel(
+                               isPasswordVisible
+                                   ? "Hide password"
+                                   : "Show password"
+                           )
+                       }
+                       .padding(.horizontal, 15)
+                       .frame(height: 52)
+                       .background(MemoMapTheme.inputBackground)
+                       .clipShape(
+                           RoundedRectangle(cornerRadius: 12)
+                       )
+                       .overlay {
+                           RoundedRectangle(cornerRadius: 12)
+                               .stroke(
+                                   MemoMapTheme.inputBorder,
+                                   lineWidth: 0.7
+                               )
+                       }
+                   }
+                   .padding(.top, 20)
 
-//                        HStack(spacing: 5) {
-//
-//                            Text("New here?")
-//                                .foregroundStyle(MemoMapTheme.green)
-//
-//                            NavigationLink {
-//                                RegisterView()
-//                            } label: {
-//                                Text("Create account")
-//                                    .foregroundStyle(MemoMapTheme.green)
-//                            }
-//                        }
-                        .font(
-                            .system(
-                                size: 11,
-                                weight: .medium
-                            )
-                        )
-                        .foregroundStyle(
-                            MemoMapTheme.Textsecondary
-                        )
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 32)
-                        .padding(.bottom, 35)
-                    }
-                    .padding(.horizontal, 29)
-                }
-            }
-            .toolbar(.hidden, for: .navigationBar)
-        }
-    }
+                   if !auth.errormessage.isEmpty {
+
+                       Text(auth.errormessage)
+                           .font(MemoFont.dmSansRegular(12))
+                           .foregroundStyle(.red)
+                           .fixedSize(
+                               horizontal: false,
+                               vertical: true
+                           )
+                           .padding(.top, 12)
+                   }
+
+                   Button {
+                       signIn()
+                   } label: {
+
+                       HStack(spacing: 10) {
+
+                           if auth.isLoading {
+
+                               ProgressView()
+                                   .tint(MemoMapTheme.White)
+
+                           } else {
+
+                               Text("Sign In")
+                                   .font(MemoFont.dmSansBold(16))
+
+//                               Image(systemName: "arrow.right")
+//                                   .font(.system(size: 14, weight: .semibold))
+                           }
+                       }
+                       .foregroundStyle(MemoMapTheme.White)
+                       .frame(maxWidth: .infinity)
+                       .frame(height: 56)
+                       .background(MemoMapTheme.green)
+                       .clipShape(Capsule())
+                   }
+                   .buttonStyle(.plain)
+                   .disabled(auth.isLoading)
+                   .opacity(auth.isLoading ? 0.75 : 1)
+                   .padding(.top, 40)
+
+                   HStack(spacing: 5) {
+
+                       Text("New to here?")
+                           .foregroundStyle(
+                               MemoMapTheme.Textsecondary
+                           )
+                           .font(MemoFont.dmSansMedium(13))
+
+
+                       NavigationLink {
+                           RegisterView()
+                       } label: {
+
+                           Text("Create account")
+                               .font(MemoFont.dmSansBold(13))
+                               .foregroundStyle(MemoMapTheme.green)
+                       }
+                   }
+                   .frame(maxWidth: .infinity)
+                   .padding(.top, 40)
+                   .padding(.bottom, 30)
+               }
+               .padding(.horizontal, 28)
+           }
+           .scrollDismissesKeyboard(.interactively)
+       }
+       .toolbar(.hidden, for: .navigationBar)
+   }
+}
+
+private func signIn() {
+
+   guard !auth.isLoading else { return }
+
+   Task {
+       await auth.login(
+           email: email.trimmingCharacters(
+               in: .whitespacesAndNewlines
+           ),
+           password: password
+       )
+   }
+}
 }
 
 #Preview {
-    LoginView()
-        .environmentObject(AuthViewModel())
+LoginView()
+   .environmentObject(AuthViewModel())
 }

@@ -14,18 +14,27 @@ struct RootView: View {
 
     @EnvironmentObject var auth: AuthViewModel
     @EnvironmentObject var appLock: AppLockManager
+    
+    @AppStorage("hasCompletedOnboarding")
+    private var hasCompletedOnboarding = false
 
     var body: some View {
-            Group {
-                if auth.user == nil {
-                    LoginView()
-                } else if appLock.isLocked {
-                    AppLockView()
-                } else {
-                    MainTabView()
-                }
-            }
-        
+        Group {
+               if !hasCompletedOnboarding {
+                   OnboardingView {
+                       hasCompletedOnboarding = true
+                   }
+
+               } else if auth.user == nil {
+                   LoginView()
+
+               } else if appLock.isLocked {
+                   AppLockView()
+
+               } else {
+                   MainTabView()
+               }
+           }
             .task(id: auth.user?.uid) {
                 guard auth.user != nil, !appLock.isLocked else {
                     return
@@ -43,8 +52,4 @@ struct RootView: View {
     RootView()
         .environmentObject(AuthViewModel())
         .environmentObject(AppLockManager.shared)
-    
-    .task {
-        LocationNotificationManager.shared.start()
-    }
 }
