@@ -26,7 +26,7 @@ struct MemoryMapView: View {
                     mapContent
                         .frame(
                             width: geometry.size.width,
-                            height: geometry.size.height  * 3 / 4
+                            height: geometry.size.height  * 0.80
                         )
                         .clipped()
 
@@ -40,7 +40,7 @@ struct MemoryMapView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .padding(.horizontal, 15)
-//            .padding(.top, 20)
+            .padding(.top, 20)
             .padding(.bottom, 24)
 //            .frame(maxWidth: 520)
 //            .frame(maxWidth: .infinity)
@@ -59,33 +59,22 @@ struct MemoryMapView: View {
         }
     }
 
-//    private var headerHeight: CGFloat {
-//        104
-//    }
-
 
     private var header: some View {
-        
         HStack(spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Google Map")
-                    .font(.system(size: 26, weight: .bold))
+                    .font(MemoFont.dmSansRegular(34))
                     .foregroundStyle(MemoMapTheme.black)
-
                 Text("Explore your moments by place.")
-                    .font(.system(size: 15))
+                    .font(MemoFont.dmSansRegular(15))
                     .foregroundStyle(MemoMapTheme.Textsecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
-
             Spacer(minLength: 2)
-
-            Image("LOGO")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 76, height: 76)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.bottom , 25)
     }
 
     private var mapContent: some View {

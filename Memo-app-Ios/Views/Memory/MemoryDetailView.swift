@@ -13,6 +13,7 @@ struct MemoryDetailView: View {
 
     @StateObject private var viewModel: MemoryDetailViewModel
     @State private var showDeleteConfirmation = false
+    @State private var showCreateCollage = false
 
     var onUpdate: (() -> Void)? = nil
     var onDeleted: (() -> Void)? = nil
@@ -53,6 +54,9 @@ struct MemoryDetailView: View {
             )
         }
         .toolbar(.hidden, for: .navigationBar)
+        .navigationDestination(isPresented: $showCreateCollage) {
+            CreateCollageView(memory: viewModel.memory)
+        }
         .navigationBarBackButtonHidden(true)
         .alert(
             "Unable to Delete Memory",
@@ -222,6 +226,28 @@ struct MemoryDetailView: View {
                 .foregroundStyle(MemoMapTheme.green.opacity(1))
             }
             .padding(.top, 10)
+            
+            Button {
+                showCreateCollage = true
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: "square.grid.2x2.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                    Text("Create Collage")
+                        .font(MemoFont.dmSansSemiBold(16))
+                    Spacer()
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 15, weight: .semibold))
+                }
+                .foregroundStyle(MemoMapTheme.White)
+                .padding(.horizontal, 20)
+                .frame(maxWidth: .infinity)
+                .frame(height: 56)
+                .background(MemoMapTheme.green)
+                .clipShape(Capsule())
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 24)
         }
         .padding(.horizontal, 16)
         .padding(.top, 30)
