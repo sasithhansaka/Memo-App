@@ -37,8 +37,11 @@ struct RootView: View {
            }
             .task(id: auth.user?.uid) {
                 guard auth.user != nil, !appLock.isLocked else {
+                    MemoryWidgetSync.shared.stop()
                     return
                 }
+                
+                MemoryWidgetSync.shared.start()
 
                 LocationNotificationManager.shared.start()
                 LocationNotificationManager.shared.refresh()

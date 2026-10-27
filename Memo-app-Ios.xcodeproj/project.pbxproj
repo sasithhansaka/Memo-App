@@ -10,10 +10,41 @@
 		D7D8E784306E5C41007CF230 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D7D8E783306E5C41007CF230 /* FirebaseAuth */; };
 		D7D8E786306E5C41007CF230 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = D7D8E785306E5C41007CF230 /* FirebaseCore */; };
 		D7D8E788306E5C41007CF230 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D7D8E787306E5C41007CF230 /* FirebaseFirestore */; };
+		D7FB564030906A2B004291DB /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7FB563F30906A2B004291DB /* WidgetKit.framework */; };
+		D7FB564230906A2B004291DB /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7FB564130906A2B004291DB /* SwiftUI.framework */; };
+		D7FB565330906A2C004291DB /* MemoAppWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D7FB563D30906A2B004291DB /* MemoAppWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D7FB565130906A2C004291DB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D7D8E72A306E240A007CF230 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D7FB563C30906A2B004291DB;
+			remoteInfo = MemoAppWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D7FB565830906A2C004291DB /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D7FB565330906A2C004291DB /* MemoAppWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D7D8E732306E240A007CF230 /* Memo-app-Ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Memo-app-Ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7FB563D30906A2B004291DB /* MemoAppWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MemoAppWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7FB563F30906A2B004291DB /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		D7FB564130906A2B004291DB /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		D7FB565930906AC9004291DB /* MemoAppWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MemoAppWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -24,6 +55,28 @@
 			);
 			target = D7D8E731306E240A007CF230 /* Memo-app-Ios */;
 		};
+		D7FB565730906A2C004291DB /* Exceptions for "MemoAppWidget" folder in "MemoAppWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D7FB563C30906A2B004291DB /* MemoAppWidgetExtension */;
+		};
+		D7FB566130907394004291DB /* Exceptions for "MemoAppWidget" folder in "Memo-app-Ios" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MemoryWidgetData.swift,
+			);
+			target = D7D8E731306E240A007CF230 /* Memo-app-Ios */;
+		};
+		D7FB566330907D89004291DB /* Exceptions for "Memo-app-Ios" folder in "MemoAppWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Theme/MemoryAppFonts.swift,
+				Theme/MemoryMapTheme.swift,
+			);
+			target = D7FB563C30906A2B004291DB /* MemoAppWidgetExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -31,8 +84,18 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				D7E7D4C730887CE800C12FAF /* Exceptions for "Memo-app-Ios" folder in "Memo-app-Ios" target */,
+				D7FB566330907D89004291DB /* Exceptions for "Memo-app-Ios" folder in "MemoAppWidgetExtension" target */,
 			);
 			path = "Memo-app-Ios";
+			sourceTree = "<group>";
+		};
+		D7FB564330906A2B004291DB /* MemoAppWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D7FB566130907394004291DB /* Exceptions for "MemoAppWidget" folder in "Memo-app-Ios" target */,
+				D7FB565730906A2C004291DB /* Exceptions for "MemoAppWidget" folder in "MemoAppWidgetExtension" target */,
+			);
+			path = MemoAppWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -48,13 +111,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D7FB563A30906A2B004291DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D7FB564230906A2B004291DB /* SwiftUI.framework in Frameworks */,
+				D7FB564030906A2B004291DB /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		D7D8E729306E240A007CF230 = {
 			isa = PBXGroup;
 			children = (
+				D7FB565930906AC9004291DB /* MemoAppWidgetExtension.entitlements */,
 				D7D8E734306E240A007CF230 /* Memo-app-Ios */,
+				D7FB564330906A2B004291DB /* MemoAppWidget */,
+				D7FB563E30906A2B004291DB /* Frameworks */,
 				D7D8E733306E240A007CF230 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -63,8 +138,18 @@
 			isa = PBXGroup;
 			children = (
 				D7D8E732306E240A007CF230 /* Memo-app-Ios.app */,
+				D7FB563D30906A2B004291DB /* MemoAppWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D7FB563E30906A2B004291DB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D7FB563F30906A2B004291DB /* WidgetKit.framework */,
+				D7FB564130906A2B004291DB /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -77,10 +162,12 @@
 				D7D8E72E306E240A007CF230 /* Sources */,
 				D7D8E72F306E240A007CF230 /* Frameworks */,
 				D7D8E730306E240A007CF230 /* Resources */,
+				D7FB565830906A2C004291DB /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D7FB565230906A2C004291DB /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				D7D8E734306E240A007CF230 /* Memo-app-Ios */,
@@ -95,6 +182,28 @@
 			productReference = D7D8E732306E240A007CF230 /* Memo-app-Ios.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D7FB563C30906A2B004291DB /* MemoAppWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D7FB565430906A2C004291DB /* Build configuration list for PBXNativeTarget "MemoAppWidgetExtension" */;
+			buildPhases = (
+				D7FB563930906A2B004291DB /* Sources */,
+				D7FB563A30906A2B004291DB /* Frameworks */,
+				D7FB563B30906A2B004291DB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D7FB564330906A2B004291DB /* MemoAppWidget */,
+			);
+			name = MemoAppWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = MemoAppWidgetExtension;
+			productReference = D7FB563D30906A2B004291DB /* MemoAppWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -106,6 +215,9 @@
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					D7D8E731306E240A007CF230 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					D7FB563C30906A2B004291DB = {
 						CreatedOnToolsVersion = 26.2;
 					};
 				};
@@ -128,12 +240,20 @@
 			projectRoot = "";
 			targets = (
 				D7D8E731306E240A007CF230 /* Memo-app-Ios */,
+				D7FB563C30906A2B004291DB /* MemoAppWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D7D8E730306E240A007CF230 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D7FB563B30906A2B004291DB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -150,7 +270,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D7FB563930906A2B004291DB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D7FB565230906A2C004291DB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D7FB563C30906A2B004291DB /* MemoAppWidgetExtension */;
+			targetProxy = D7FB565130906A2C004291DB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		D7D8E73B306E240B007CF230 /* Debug */ = {
@@ -278,6 +413,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = "Memo-app-Ios/Memo-app-Ios.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -322,6 +458,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = "Memo-app-Ios/Memo-app-Ios.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -360,6 +497,70 @@
 			};
 			name = Release;
 		};
+		D7FB565530906A2C004291DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MemoAppWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6YF2HPTXY9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MemoAppWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MemoAppWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Sasith.Memo-app-Ios.MemoAppWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D7FB565630906A2C004291DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MemoAppWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6YF2HPTXY9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MemoAppWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MemoAppWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Sasith.Memo-app-Ios.MemoAppWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -377,6 +578,15 @@
 			buildConfigurations = (
 				D7D8E73E306E240B007CF230 /* Debug */,
 				D7D8E73F306E240B007CF230 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D7FB565430906A2C004291DB /* Build configuration list for PBXNativeTarget "MemoAppWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D7FB565530906A2C004291DB /* Debug */,
+				D7FB565630906A2C004291DB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
