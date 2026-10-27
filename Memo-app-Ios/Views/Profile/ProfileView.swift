@@ -20,8 +20,8 @@ struct ProfileView: View {
 
     var body: some View {
         ZStack {
-            MemoMapTheme.background
-            .ignoresSafeArea()
+//            MemoMapTheme.background
+//            .ignoresSafeArea()
             
         
             ScrollView(showsIndicators: false) {

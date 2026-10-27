@@ -21,9 +21,7 @@ struct HomeView: View {
     ]
 
     @StateObject private var viewModel = HomeViewModel()
-
-    //    @State private var selectedMemory: Memory?
-
+    
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
@@ -221,7 +219,7 @@ struct HomeView: View {
                         decoration: .memories
                     )
                     collectionCard(
-                        title: "This year",
+                        title: "Year",
                         count: viewModel.thisYearTotal,
                         image: "Tyear",
                         decoration: .leaves
@@ -247,11 +245,11 @@ struct HomeView: View {
             image: String,
             decoration: CollectionDecoration
         ) -> some View {
-            HStack(spacing: 16) {
+            HStack(spacing: 10) {
                 Image(image)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 45, height: 45)
+                    .frame(width: 41, height: 41)
                     .padding(5)
                     .background(
                         MemoMapTheme.lightGreen.opacity(0.32)
@@ -262,21 +260,22 @@ struct HomeView: View {
                             style: .continuous
                         )
                     )
+                
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .font(MemoFont.dmSansRegular(18))
-                        .foregroundStyle(MemoMapTheme.Textsecondary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.75)
+                        .font(MemoFont.dmSansRegular(15))
+                        .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                     Text("\(count)")
-                        .font(MemoFont.dmSansBold(22))
+                        .font(MemoFont.dmSansBold(21))
                         .foregroundStyle(MemoMapTheme.black)
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
                 }
                 Spacer(minLength: 0)
             }
-            .padding(14)
+            .padding(12)
             .frame(maxWidth: .infinity, minHeight: 100, alignment: .leading)
             .background {
                 ZStack(alignment: .bottomTrailing) {
@@ -284,7 +283,7 @@ struct HomeView: View {
                         cornerRadius: 12,
                         style: .continuous
                     )
-                    .fill(MemoMapTheme.inputBackground.opacity(0.35))
+                    .fill(MemoMapTheme.inputBackground.opacity(0.45))
                     CollectionWave()
                         .fill(
                             MemoMapTheme.lightGreen.opacity(0.18)
@@ -292,7 +291,7 @@ struct HomeView: View {
                         .frame(width: 130, height: 65)
                         .offset(x: 8, y: 8)
                     Image(systemName: decoration.symbol)
-                        .font(.system(size: 24, weight: .light))
+                        .font(.system(size: 24, weight: .medium))
                         .foregroundStyle(
                             MemoMapTheme.green.opacity(0.16)
                         )
@@ -355,6 +354,7 @@ struct HomeView: View {
                 }
             }
         }
+    
         private var recentlyAddedSection: some View {
             VStack(alignment: .leading, spacing: 18) {
                 HStack {
@@ -390,6 +390,7 @@ struct HomeView: View {
                 }
             }
         }
+    
         private func memoryCard(_ memory: Memory) -> some View {
             let photoCount = max(memory.photoBase64?.count ?? 0, 1)
             return GeometryReader { geometry in
@@ -399,7 +400,7 @@ struct HomeView: View {
                     VStack(alignment: .leading, spacing: 0) {
                         HStack(alignment: .top, spacing: 5) {
                             Text(memory.title)
-                                .font(MemoFont.dmSansBold(15))
+                                .font(MemoFont.dmSansBold(16))
                                 .foregroundStyle(MemoMapTheme.black)
                                 .lineLimit(2)
                                 .multilineTextAlignment(.leading)
@@ -409,7 +410,7 @@ struct HomeView: View {
                         HStack(spacing: 6) {
                             Image(systemName: "calendar")
                                 .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(MemoMapTheme.green)
+                                .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
                             Text(
                                 memory.memoryDate,
                                 format: .dateTime
@@ -417,8 +418,8 @@ struct HomeView: View {
                                     .month(.abbreviated)
                                     .year()
                             )
-                            .font(MemoFont.dmSansRegular(12))
-                            .foregroundStyle(MemoMapTheme.Textsecondary)
+                            .font(MemoFont.dmSansRegular(14))
+                            .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
                             .lineLimit(1)
                             .fixedSize(horizontal: true, vertical: false)
                             Rectangle()
@@ -426,9 +427,9 @@ struct HomeView: View {
                                 .frame(width: 1, height: 18)
                             Image(systemName: "map")
                                 .font(.system(size: 14, weight: .semibold))
-                                .foregroundStyle(MemoMapTheme.green)
+                                .foregroundStyle(MemoMapTheme.Textsecondary)
                             Text(memory.placeName ?? "No location")
-                                .font(MemoFont.dmSansRegular(12))
+                                .font(MemoFont.dmSansRegular(14))
                                 .foregroundStyle(MemoMapTheme.Textsecondary)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
@@ -440,8 +441,8 @@ struct HomeView: View {
                                in: .whitespacesAndNewlines
                            ).isEmpty {
                             Text(description)
-                                .font(MemoFont.dmSansRegular(13))
-                                .foregroundStyle(MemoMapTheme.Textsecondary)
+                                .font(MemoFont.dmSansRegular(14))
+                                .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
                                 .lineLimit(2)
                                 .multilineTextAlignment(.leading)
                                 .frame(
@@ -457,7 +458,7 @@ struct HomeView: View {
                             } icon: {
                                 Image(systemName: "person.2.fill")
                             }
-                            .font(MemoFont.dmSansMedium(11))
+                            .font(MemoFont.dmSansMedium(14))
                             .foregroundStyle(MemoMapTheme.green)
                             .padding(.horizontal, 9)
                             .padding(.vertical, 8)
@@ -465,24 +466,11 @@ struct HomeView: View {
                                 MemoMapTheme.lightGreen.opacity(0.3)
                             )
                             .clipShape(Capsule())
-    //                        Label {
-    //                            Text("\(photoCount)")
-    //                        } icon: {
-    //                            Image(systemName: "photo")
-    //                        }
-    //                        .font(MemoFont.dmSansMedium(11))
-    //                        .foregroundStyle(MemoMapTheme.green)
-    //                        .padding(.horizontal, 9)
-    //                        .padding(.vertical, 8)
-    //                        .background(
-    //                            MemoMapTheme.lightGreen.opacity(0.3)
-    //                        )
-    //                        .clipShape(Capsule())
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .frame(height: 100)
+                    .frame(height: 110)
                     .padding(.leading, 12)
                     .padding(.vertical, 10)
                     ZStack(alignment: .bottomTrailing) {
@@ -509,20 +497,6 @@ struct HomeView: View {
                         }
                         .frame(width: imageWidth, height: 120)
                         .clipped()
-                        Label {
-                            Text("\(photoCount)")
-                        } icon: {
-                            Image(systemName: "photo")
-                        }
-                        .font(MemoFont.dmSansMedium(11))
-                        .foregroundStyle(MemoMapTheme.green)
-                        .padding(.horizontal, 9)
-                        .padding(.vertical, 8)
-                        .background(
-                            MemoMapTheme.lightGreen.opacity(0.3)
-                        )
-                        .clipShape(Capsule())
-                        
                         
                     }
                     .frame(width: imageWidth, height: 120)
@@ -535,7 +509,7 @@ struct HomeView: View {
                     .padding(.trailing, 8)
                     .padding(.vertical, 10)
                 }
-                .frame(width: cardWidth, height: 130)
+                .frame(width: cardWidth, height: 140)
                 .background {
                     LinearGradient(
                         colors: [
@@ -563,7 +537,7 @@ struct HomeView: View {
                     )
                 }
             }
-            .frame(height: 130)
+            .frame(height: 140)
             .frame(maxWidth: .infinity)
         }
     }

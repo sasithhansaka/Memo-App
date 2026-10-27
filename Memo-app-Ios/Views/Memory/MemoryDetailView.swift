@@ -155,7 +155,7 @@ struct MemoryDetailView: View {
                 }
             }
             .padding(.horizontal, 22)
-            .padding(.top, 65)
+            .padding(.top, 45)
 
             if viewModel.photos.count > 1 {
                 VStack {
@@ -166,13 +166,13 @@ struct MemoryDetailView: View {
                             Circle()
                                 .fill(
                                     viewModel.selectedPhotoIndex == index
-                                        ? Color.white
-                                        : Color.white.opacity(0.5)
+                                    ? MemoMapTheme.green
+                                    : MemoMapTheme.green.opacity(0.7)
                                 )
                                 .frame(width: 7, height: 7)
                         }
                     }
-                    .padding(.bottom, 22)
+                    .padding(.bottom, 37)
                 }
                 .frame(height: 350)
                 .allowsHitTesting(false)

@@ -66,7 +66,7 @@ struct MainTabView: View {
             navigationItem(
                 tab: .map,
                 title: "Map",
-                icon: "location"
+                icon: "map"
             )
 
             navigationItem(
@@ -95,6 +95,11 @@ struct MainTabView: View {
         .background {
             MemoMapTheme.background
                 .ignoresSafeArea(edges: .bottom)
+        }
+        .overlay(alignment: .top) {
+            Rectangle()
+                .fill(MemoMapTheme.inputBorder.opacity(0.2))
+                .frame(height: 1)
         }
     }
 

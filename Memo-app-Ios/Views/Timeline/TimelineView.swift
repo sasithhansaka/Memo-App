@@ -43,7 +43,7 @@ struct TimelineView: View {
                         }
                     }
                 }
-                .padding(.top, 16)
+                .padding(.top, 20)
                 .padding(.bottom, 30)
                 .frame(maxWidth: 520)
                 .frame(maxWidth: .infinity)
@@ -175,7 +175,7 @@ struct TimelineView: View {
             .clipShape(Circle())
             VStack(alignment: .leading, spacing: 5) {
                 Text(memory.title)
-                    .font(MemoFont.dmSansBold(15))
+                    .font(MemoFont.dmSansBold(16))
                     .foregroundStyle(MemoMapTheme.black)
                     .lineLimit(1)
                 HStack(spacing: 5) {
@@ -196,8 +196,8 @@ struct TimelineView: View {
                     )
                     .lineLimit(1)
                 }
-                .font(MemoFont.dmSansRegular(12))
-                .foregroundStyle(MemoMapTheme.Textsecondary)
+                .font(MemoFont.dmSansRegular(13))
+                .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
             }
             Spacer(minLength: 0)
         }
@@ -215,7 +215,7 @@ struct TimelineView: View {
                         .scaledToFill()
                         .frame(
                             width: availableWidth,
-                            height: 295
+                            height: 345
                         )
                         .clipped()
                 } else {
@@ -227,7 +227,7 @@ struct TimelineView: View {
                     }
                     .frame(
                         width: availableWidth,
-                        height: 295
+                        height: 345
                     )
                     .clipped()
                 }
@@ -236,7 +236,7 @@ struct TimelineView: View {
                 RoundedRectangle(cornerRadius: 0)
             )
         }
-        .frame(height: 295)
+        .frame(height: 325)
         .frame(maxWidth: .infinity)
         .clipped()
     }
@@ -249,7 +249,7 @@ struct TimelineView: View {
         let characterLimit = 40
         return (
             Text(memory.title + " ")
-                .font(MemoFont.dmSansBold(14))
+                .font(MemoFont.dmSansBold(15))
                 .foregroundColor(MemoMapTheme.black)
             +
             
@@ -258,13 +258,13 @@ struct TimelineView: View {
                     ? description
                     : String(description.prefix(characterLimit)) + "... "
             )
-            .font(MemoFont.dmSansRegular(14))
+            .font(MemoFont.dmSansRegular(15))
             .foregroundColor(MemoMapTheme.Textsecondary.opacity(0.9))
             +
             (
                 description.count > characterLimit && !isExpanded
                     ? Text("more")
-                        .font(MemoFont.dmSansMedium(12))
+                        .font(MemoFont.dmSansMedium(13))
                         .foregroundColor(MemoMapTheme.Textsecondary.opacity(0.7))
                     : Text("")
             )
