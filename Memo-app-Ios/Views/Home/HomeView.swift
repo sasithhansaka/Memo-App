@@ -11,8 +11,9 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    @EnvironmentObject var auth: AuthViewModel
+//    @EnvironmentObject var auth: AuthViewModel
     @State private var selectedMemory: Memory?
+    @Binding var selectedTab: Tabs
 
     private let columns = [
         GridItem(.flexible(), spacing: 10),
@@ -98,9 +99,9 @@ struct HomeView: View {
     }
     
     private var nearbyMemoryCard: some View {
-        NavigationLink {
-            AddMemoryView()
-        } label: {
+        Button {
+                selectedTab = .add
+            } label: {
             VStack(alignment: .leading, spacing: 0) {
 
                 Image("create-memory")
@@ -153,7 +154,6 @@ struct HomeView: View {
         
         .buttonStyle(.plain)
     }
-    
 
     
     private var searchBanner: some View {
@@ -379,8 +379,8 @@ struct HomeView: View {
                 } else {
                     VStack(spacing: 16) {
                         ForEach(viewModel.recentMemories) { memory in
-                            Button {
-                                selectedMemory = memory
+                            NavigationLink {
+                                MemoryDetailView(memory: memory)
                             } label: {
                                 memoryCard(memory)
                             }
@@ -391,160 +391,159 @@ struct HomeView: View {
             }
         }
     
-        private func memoryCard(_ memory: Memory) -> some View {
-            let photoCount = max(memory.photoBase64?.count ?? 0, 1)
-            return GeometryReader { geometry in
-                let cardWidth = geometry.size.width
-                let imageWidth = min(max(cardWidth * 0.34, 105), 145)
-                HStack(spacing: 10) {
-                    VStack(alignment: .leading, spacing: 0) {
-                        HStack(alignment: .top, spacing: 5) {
-                            Text(memory.title)
-                                .font(MemoFont.dmSansBold(16))
-                                .foregroundStyle(MemoMapTheme.black)
-                                .lineLimit(2)
-                                .multilineTextAlignment(.leading)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        Spacer(minLength: 10)
-                        HStack(spacing: 6) {
-                            Image(systemName: "calendar")
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
-                            Text(
-                                memory.memoryDate,
-                                format: .dateTime
-                                    .day()
-                                    .month(.abbreviated)
-                                    .year()
-                            )
-                            .font(MemoFont.dmSansRegular(14))
-                            .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
-                            .lineLimit(1)
-                            .fixedSize(horizontal: true, vertical: false)
-                            Rectangle()
-                                .fill(MemoMapTheme.inputBorder)
-                                .frame(width: 1, height: 18)
-                            Image(systemName: "map")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundStyle(MemoMapTheme.Textsecondary)
-                            Text(memory.placeName ?? "No location")
-                                .font(MemoFont.dmSansRegular(14))
-                                .foregroundStyle(MemoMapTheme.Textsecondary)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        Spacer(minLength: 10)
-                        if let description = memory.description,
-                           !description.trimmingCharacters(
-                               in: .whitespacesAndNewlines
-                           ).isEmpty {
-                            Text(description)
-                                .font(MemoFont.dmSansRegular(14))
-                                .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
-                                .lineLimit(2)
-                                .multilineTextAlignment(.leading)
-                                .frame(
-                                    maxWidth: .infinity,
-                                    alignment: .leading
-                                )
-                        }
-                        Spacer(minLength: 10)
-                        HStack(spacing: 6) {
-                            Label {
-                                Text(memory.category)
-                                    .lineLimit(1)
-                            } icon: {
-                                Image(systemName: "person.2.fill")
-                            }
-                            .font(MemoFont.dmSansMedium(14))
-                            .foregroundStyle(MemoMapTheme.green)
-                            .padding(.horizontal, 9)
-                            .padding(.vertical, 8)
-                            .background(
-                                MemoMapTheme.lightGreen.opacity(0.3)
-                            )
-                            .clipShape(Capsule())
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
+    private func memoryCard(_ memory: Memory) -> some View {
+        
+        let photoCount = max(memory.photoBase64?.count ?? 0, 1)
+        return GeometryReader { geometry in
+            let cardWidth = geometry.size.width
+            let imageWidth = min(max(cardWidth * 0.34, 105), 145)
+            HStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 0) {
+                    
+                    HStack(alignment: .top, spacing: 5) {
+                        Text(memory.title)
+                            .font(MemoFont.dmSansBold(17))
+                            .foregroundStyle(MemoMapTheme.black)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .frame(height: 110)
-                    .padding(.leading, 12)
-                    .padding(.vertical, 10)
-                    ZStack(alignment: .bottomTrailing) {
-                        Group {
-                            if let image = MemoryImageEncoder.decode(
-                                memory.coverPhotoBase64
-                            ) {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .scaledToFill()
-                            } else {
-                                Rectangle()
-                                    .fill(
-                                        MemoMapTheme.inputBorder.opacity(0.3)
-                                    )
-                                    .overlay {
-                                        Image(systemName: "photo")
-                                            .font(.system(size: 25))
-                                            .foregroundStyle(
-                                                MemoMapTheme.lightGreen
-                                            )
-                                    }
-                            }
-                        }
-                        .frame(width: imageWidth, height: 120)
-                        .clipped()
+                    
+                    Spacer(minLength: 10)
+                    HStack(spacing: 6) {
+                        Image(systemName: "calendar")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
+                        
+                        Text(
+                            memory.memoryDate,
+                            format: .dateTime
+                                .day()
+                                .month(.abbreviated)
+                                .year()
+                        )
+                        .font(MemoFont.dmSansRegular(14))
+                        .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
+                        .lineLimit(1)
+                        .fixedSize(horizontal: true, vertical: false)
+                        
+                        Rectangle()
+                            .fill(MemoMapTheme.inputBorder)
+                            .frame(width: 1, height: 18)
+                        
+                        Image(systemName: "map")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(MemoMapTheme.Textsecondary)
+                        
+                        
+                        Text(memory.placeName ?? "No location")
+                            .font(MemoFont.dmSansRegular(14))
+                            .foregroundStyle(MemoMapTheme.Textsecondary)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
                         
                     }
-                    .frame(width: imageWidth, height: 120)
-                    .clipShape(
-                        RoundedRectangle(
-                            cornerRadius: 12,
-                            style: .continuous
+                    Spacer(minLength: 10)
+                    
+                    HStack(spacing: 6) {
+                        Label {
+                            Text(memory.category)
+                                .lineLimit(1)
+                        } icon: {
+                            Image(systemName: "person.2.fill")
+                        }
+                        .font(MemoFont.dmSansMedium(14))
+                        .foregroundStyle(MemoMapTheme.green)
+                        .padding(.horizontal, 9)
+                        .padding(.vertical, 8)
+                        .background(
+                            MemoMapTheme.lightGreen.opacity(0.3)
                         )
-                    )
-                    .padding(.trailing, 8)
-                    .padding(.vertical, 10)
+                        .clipShape(Capsule())
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .frame(width: cardWidth, height: 140)
-                .background {
-                    LinearGradient(
-                        colors: [
-                            MemoMapTheme.inputBackground.opacity(0.45),
-                            MemoMapTheme.inputBackground.opacity(0.85)
-                        ],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(height: 100)
+                .padding(.leading, 12)
+                .padding(.vertical, 10)
+                ZStack(alignment: .bottomTrailing) {
+                    Group {
+                        if let image = MemoryImageEncoder.decode(
+                            memory.coverPhotoBase64
+                        ) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                        } else {
+                            Rectangle()
+                                .fill(
+                                    MemoMapTheme.inputBorder.opacity(0.3)
+                                )
+                                .overlay {
+                                    Image(systemName: "photo")
+                                        .font(.system(size: 25))
+                                        .foregroundStyle(
+                                            MemoMapTheme.lightGreen
+                                        )
+                                }
+                        }
+                    }
+                    .frame(width: imageWidth, height: 120)
+                    .clipped()
+                    
                 }
+                .frame(width: imageWidth, height: 120)
                 .clipShape(
                     RoundedRectangle(
                         cornerRadius: 12,
                         style: .continuous
                     )
                 )
-                .overlay {
-                    RoundedRectangle(
-                        cornerRadius: 12,
-                        style: .continuous
-                    )
-                    .stroke(
-                        MemoMapTheme.inputBorder.opacity(0.3),
-                        lineWidth: 0.7
-                    )
-                }
+                .padding(.trailing, 8)
+                .padding(.vertical, 10)
             }
-            .frame(height: 140)
-            .frame(maxWidth: .infinity)
+            .frame(width: cardWidth, height: 140)
+            .background {
+                LinearGradient(
+                    colors: [
+                        MemoMapTheme.inputBackground.opacity(0.45),
+                        MemoMapTheme.inputBackground.opacity(0.85)
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            }
+            .clipShape(
+                RoundedRectangle(
+                    cornerRadius: 12,
+                    style: .continuous
+                )
+            )
+            .overlay {
+                RoundedRectangle(
+                    cornerRadius: 12,
+                    style: .continuous
+                )
+                .stroke(
+                    MemoMapTheme.inputBorder.opacity(0.3),
+                    lineWidth: 0.7
+                )
+            }
         }
+        .frame(height: 140)
+        .frame(maxWidth: .infinity)
+    }
+    
     }
 
+
 #Preview {
+    @Previewable @State var selectedTab: Tabs = .home
+
     NavigationStack {
-        HomeView()
-            .environmentObject(AuthViewModel())
+        HomeView(selectedTab: $selectedTab)
     }
 }

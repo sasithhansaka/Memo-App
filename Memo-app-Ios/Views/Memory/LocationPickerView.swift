@@ -332,7 +332,6 @@ struct MemoryLocationPickerView: View {
         }
     }
 
-    // MARK: - Select Search Result
 
     private func selectPlace(_ item: MKMapItem) {
         let coordinate = item.placemark.coordinate

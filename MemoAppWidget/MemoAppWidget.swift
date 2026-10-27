@@ -105,7 +105,7 @@ struct MemoryWidgetProvider: TimelineProvider {
 
             let entryDate = Calendar.current.date(
                 byAdding: .minute,
-                value: index * 15,
+                value: index * 1,
                 to: .now
             ) ?? .now
 
@@ -132,7 +132,10 @@ struct MemoryWidgetProvider: TimelineProvider {
 }
 
 struct MemoAppWidgetEntryView: View {
+
     let entry: MemoryWidgetProvider.Entry
+
+    @Environment(\.widgetFamily) private var widgetFamily
 
     var body: some View {
         Group {
@@ -142,67 +145,91 @@ struct MemoAppWidgetEntryView: View {
                 emptyState
             }
         }
+        .containerBackground(.white, for: .widget)
     }
 
-    private func memoryCard(_ memory: MemoryWidgetItem) -> some View {
+    private func memoryCard(
+        _ memory: MemoryWidgetItem
+    ) -> some View {
         GeometryReader { geometry in
-            VStack(alignment: .leading, spacing: 0) {
+
+            let imageHeight = geometry.size.height * 0.68
+
+            VStack(spacing: 0) {
 
                 memoryImage(memory)
                     .frame(
                         width: geometry.size.width,
-                        height: geometry.size.height * 0.68
+                        height: imageHeight
                     )
                     .clipped()
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Label {
-                        Text(
-                            memory.memoryDate,
-                            format: .dateTime
+                VStack(alignment: .leading, spacing: 7) {
+
+                    detailRow(
+                        icon: "calendar",
+                        text: memory.memoryDate.formatted(
+                            .dateTime
                                 .day()
                                 .month(.abbreviated)
                                 .year()
                         )
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.75)
-                    } icon: {
-                        Image(systemName: "calendar")
-                    }
-                    .font(MemoFont.dmSansMedium(10))
-                    .foregroundStyle(MemoMapTheme.Textsecondary)
+                    )
 
-                    Label {
-                        Text(locationText(for: memory))
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-                    } icon: {
-                        Image(systemName: "map")
-                    }
-                    .font(MemoFont.dmSansRegular(10))
-                    .foregroundStyle(MemoMapTheme.Textsecondary)
+                    detailRow(
+                        icon: "map",
+                        text: locationText(for: memory)
+                    )
                 }
-                .padding(.horizontal, 8)
-                .padding(.top, 5)
+                .padding(.horizontal, 12)
+                .padding(.top, 8)
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
 
                 Spacer(minLength: 0)
             }
             .frame(
                 width: geometry.size.width,
                 height: geometry.size.height,
-                alignment: .topLeading
+                alignment: .top
             )
             .background(MemoMapTheme.background)
-            .clipShape(
-                RoundedRectangle(cornerRadius: 2)
-            )
         }
     }
 
-    private func locationText(for memory: MemoryWidgetItem) -> String {
+
+    private func detailRow(
+        icon: String,
+        text: String
+    ) -> some View {
+
+        HStack(spacing: 9) {
+
+            Image(systemName: icon)
+                .font(.system(size: 13, weight: .medium))
+                .frame(width: 16)
+
+            Text(text)
+                .font(MemoFont.dmSansRegular(12))
+                .lineLimit(1)
+                .truncationMode(.tail)
+//                .minimumScaleFactor(0.75)
+
+            Spacer(minLength: 0)
+        }
+        .foregroundStyle(MemoMapTheme.Textsecondary)
+    }
+
+    private func locationText(
+        for memory: MemoryWidgetItem
+    ) -> String {
+
         guard let placeName = memory.placeName?
             .trimmingCharacters(in: .whitespacesAndNewlines),
-              !placeName.isEmpty else {
+            !placeName.isEmpty else {
+
             return "Location not added"
         }
 
@@ -210,16 +237,31 @@ struct MemoAppWidgetEntryView: View {
     }
 
     @ViewBuilder
-    private func memoryImage(_ memory: MemoryWidgetItem) -> some View {
-        if let data = Data(base64Encoded: memory.coverPhotoBase64),
-           let image = UIImage(data: data) {
+    private func memoryImage(
+        _ memory: MemoryWidgetItem
+    ) -> some View {
 
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
+        if let data = Data(
+            base64Encoded: memory.coverPhotoBase64
+        ),
+        let image = UIImage(data: data) {
+
+            GeometryReader { imageGeometry in
+
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(
+                        width: imageGeometry.size.width,
+                        height: imageGeometry.size.height
+                    )
+                    .clipped()
+            }
+
         } else {
+
             ZStack {
-                Color.gray.opacity(0.15)
+                Color.gray.opacity(0.10)
 
                 Image(systemName: "photo")
                     .font(.system(size: 28))
@@ -229,12 +271,16 @@ struct MemoAppWidgetEntryView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: 8) {
+
+        VStack(spacing: 9) {
+
             Image(systemName: "book.closed")
-                .font(MemoFont.dmSansRegular(24))
+                .font(.system(size: 27))
+                .foregroundStyle(MemoMapTheme.lightGreen)
 
             Text("Your memories await")
                 .font(MemoFont.dmSansBold(16))
+                .foregroundStyle(MemoMapTheme.black)
 
             Text("Save a memory in MemoMap to see it here.")
                 .font(MemoFont.dmSansRegular(11))
@@ -247,13 +293,16 @@ struct MemoAppWidgetEntryView: View {
 
 
 struct MemoAppWidget: Widget {
+
     let kind = "MemoAppWidget"
 
     var body: some WidgetConfiguration {
+
         StaticConfiguration(
             kind: kind,
             provider: MemoryWidgetProvider()
         ) { entry in
+
             MemoAppWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("MemoMap Memories")

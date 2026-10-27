@@ -421,6 +421,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Memo-app-Ios/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Momento;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID protects your private memories in Memo.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Memo app uses background location access to remind you about memories when you return to saved places.";
@@ -466,6 +467,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Memo-app-Ios/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Momento;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID protects your private memories in Memo.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Memo app uses background location access to remind you about memories when you return to saved places.";

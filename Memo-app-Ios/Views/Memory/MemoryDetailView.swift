@@ -46,12 +46,17 @@ struct MemoryDetailView: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-                .ignoresSafeArea(edges: .top)
             }
+            
             .frame(
                 width: geometry.size.width,
                 height: geometry.size.height
             )
+            .background {
+                MemoMapTheme.background
+                    .ignoresSafeArea()
+            }
+            .clipped()
         }
         .toolbar(.hidden, for: .navigationBar)
         .navigationDestination(isPresented: $showCreateCollage) {

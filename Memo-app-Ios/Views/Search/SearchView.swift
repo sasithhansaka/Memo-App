@@ -63,19 +63,14 @@ struct SearchView: View {
                 height: geometry.size.height,
                 alignment: .top
             )
-
-            .background {
-                MemoMapTheme.background
-                    .ignoresSafeArea()
-            }
-            .clipped()
         }
-//        .ignoresSafeArea(edges: .top)
 
-         .background {
+        .background {
             MemoMapTheme.background
                 .ignoresSafeArea()
         }
+        .clipped()
+        
          .navigationBarBackButtonHidden(true)
          .toolbarBackground(.hidden, for: .navigationBar)
         .tint(MemoMapTheme.green)
@@ -249,25 +244,29 @@ struct SearchView: View {
     }
 
     private func memoryCard(_ memory: Memory) -> some View {
+        
         let photoCount = max(memory.photoBase64?.count ?? 0, 1)
         return GeometryReader { geometry in
             let cardWidth = geometry.size.width
             let imageWidth = min(max(cardWidth * 0.34, 105), 145)
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 0) {
+                    
                     HStack(alignment: .top, spacing: 5) {
                         Text(memory.title)
-                            .font(MemoFont.dmSansBold(16))
+                            .font(MemoFont.dmSansBold(17))
                             .foregroundStyle(MemoMapTheme.black)
                             .lineLimit(2)
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                    
                     Spacer(minLength: 10)
                     HStack(spacing: 6) {
                         Image(systemName: "calendar")
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
+                        
                         Text(
                             memory.memoryDate,
                             format: .dateTime
@@ -279,35 +278,27 @@ struct SearchView: View {
                         .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
                         .lineLimit(1)
                         .fixedSize(horizontal: true, vertical: false)
+                        
                         Rectangle()
                             .fill(MemoMapTheme.inputBorder)
                             .frame(width: 1, height: 18)
+                        
                         Image(systemName: "map")
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundStyle(MemoMapTheme.Textsecondary)
+                        
+                        
                         Text(memory.placeName ?? "No location")
                             .font(MemoFont.dmSansRegular(14))
                             .foregroundStyle(MemoMapTheme.Textsecondary)
                             .lineLimit(1)
                             .truncationMode(.tail)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        
                     }
                     Spacer(minLength: 10)
-                    if let description = memory.description,
-                       !description.trimmingCharacters(
-                           in: .whitespacesAndNewlines
-                       ).isEmpty {
-                        Text(description)
-                            .font(MemoFont.dmSansRegular(14))
-                            .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
-                            .lineLimit(2)
-                            .multilineTextAlignment(.leading)
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
-                    }
-                    Spacer(minLength: 10)
+                    
                     HStack(spacing: 6) {
                         Label {
                             Text(memory.category)
@@ -327,7 +318,7 @@ struct SearchView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .frame(height: 110)
+                .frame(height: 100)
                 .padding(.leading, 12)
                 .padding(.vertical, 10)
                 ZStack(alignment: .bottomTrailing) {

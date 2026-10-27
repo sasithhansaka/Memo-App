@@ -154,7 +154,14 @@ struct ProfileView: View {
                 .padding(.bottom, 24)
                 .frame(maxWidth: 520)
                 .frame(maxWidth: .infinity)
+                
                 }
+            
+            .background {
+                MemoMapTheme.background
+                    .ignoresSafeArea()
+            }
+            .clipped()
             }
         .task {
             await auth.loadUserProfile()

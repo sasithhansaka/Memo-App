@@ -48,6 +48,11 @@ struct TimelineView: View {
                 .frame(maxWidth: 520)
                 .frame(maxWidth: .infinity)
             }
+            .background {
+                MemoMapTheme.background
+                    .ignoresSafeArea()
+            }
+            .clipped()
         }
         .onAppear {
             viewModel.startListening()
@@ -55,7 +60,9 @@ struct TimelineView: View {
         .onDisappear {
             viewModel.stopListening()
         }
+        
     }
+    
     private var header: some View {
         HStack(spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
@@ -72,6 +79,7 @@ struct TimelineView: View {
         .padding(.horizontal, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
+    
     private var yearFilters: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
@@ -84,6 +92,7 @@ struct TimelineView: View {
             .padding(.horizontal, 16)
         }
     }
+    
     private func yearChip(
         title: String,
         year: Int?
@@ -121,6 +130,7 @@ struct TimelineView: View {
         }
         .buttonStyle(.plain)
     }
+    
     private func yearSection(
         year: Int,
         memories: [Memory]
@@ -144,6 +154,7 @@ struct TimelineView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
+    
     private func memoryFeedCard(_ memory: Memory) -> some View {
         VStack(alignment: .leading, spacing: 20) {
             memoryHeader(memory)
@@ -153,6 +164,7 @@ struct TimelineView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .clipped()
     }
+    
     private func memoryHeader(_ memory: Memory) -> some View {
         HStack(alignment: .center, spacing: 10) {
             Group {
@@ -203,6 +215,7 @@ struct TimelineView: View {
         }
         .padding(.horizontal, 16)
     }
+    
     private func memoryPhotoCarousel(_ memory: Memory) -> some View {
         GeometryReader { geometry in
             let availableWidth = geometry.size.width
@@ -285,6 +298,7 @@ struct TimelineView: View {
             }
         }
     }
+    
     private var loadingView: some View {
         VStack(spacing: 12) {
             ProgressView()
@@ -295,6 +309,7 @@ struct TimelineView: View {
         .frame(maxWidth: .infinity)
         .padding(.top, 40)
     }
+    
     private var emptyView: some View {
         VStack(spacing: 12) {
             Image(systemName: "clock")
@@ -311,6 +326,7 @@ struct TimelineView: View {
         .frame(maxWidth: .infinity)
         .padding(.top, 40)
     }
+    
     private var emptyFilterView: some View {
         Text("No memories found for this year.")
             .font(MemoFont.dmSansRegular(14))
@@ -318,6 +334,7 @@ struct TimelineView: View {
             .frame(maxWidth: .infinity)
             .padding(.top, 35)
     }
+    
     private func errorView(_ message: String) -> some View {
         VStack(spacing: 12) {
             Image(systemName: "exclamationmark.circle")

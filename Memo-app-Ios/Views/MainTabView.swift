@@ -25,8 +25,9 @@ struct MainTabView: View {
                 switch tab {
 
                 case .home:
-                    HomeView()
-
+                    HomeView(selectedTab: $tab)
+                    
+                    
                 case .map:
                     MemoryMapView()
 

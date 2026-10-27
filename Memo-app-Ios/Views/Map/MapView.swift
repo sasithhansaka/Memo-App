@@ -149,6 +149,7 @@ struct MemoryMapView: View {
                 .background(.regularMaterial)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
                 .padding()
+                
             } else if viewModel.memoriesWithLocations.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "map")
@@ -279,8 +280,8 @@ struct MemoryMapView: View {
             .background {
                 LinearGradient(
                     colors: [
-                        MemoMapTheme.inputBackground.opacity(0.45),
-                        MemoMapTheme.inputBackground.opacity(0.85)
+                        MemoMapTheme.inputBackground.opacity(0.65),
+                        MemoMapTheme.inputBackground.opacity(0.95)
                     ],
                     startPoint: .leading,
                     endPoint: .trailing
@@ -307,63 +308,6 @@ struct MemoryMapView: View {
         .frame(maxWidth: .infinity)
     }
 
-//    private func memoryPreview(_ memory: Memory) -> some View {
-//        HStack(spacing: 0) {
-//            VStack(alignment: .leading, spacing: 7) {
-//                 Text(memory.title)
-//                     .font(.system(size: 15, weight: .semibold))
-//                     .foregroundStyle(MemoMapTheme.black)
-//                     .lineLimit(2)
-//                     .multilineTextAlignment(.leading)
-//
-//                 HStack(spacing: 4) {
-//                     Text(memory.memoryDate, format: .dateTime
-//                         .month(.abbreviated)
-//                         .day()
-//                         .year()
-//                     )
-//
-//                     Text("•")
-//
-//                     Text(memory.placeName ?? "Location not added")
-//                         .lineLimit(1)
-//                 }
-//                 .font(.system(size: 13))
-//                 .foregroundStyle(MemoMapTheme.Textsecondary)
-//             }
-//             .frame(maxWidth: .infinity, alignment: .leading)
-//             .padding(.leading, 12)
-//             .padding(.vertical, 12)
-//
-//             Group {
-//                 if let image = MemoryImageEncoder.decode(
-//                     memory.coverPhotoBase64
-//                 ) {
-//                     Image(uiImage: image)
-//                         .resizable()
-//                         .scaledToFill()
-//                 } else {
-//                     ZStack {
-////                         MemoMapTheme.inputBorder.opacity(0.3)
-//
-//                         Image(systemName: "photo")
-//                             .foregroundStyle(MemoMapTheme.Textsecondary)
-//                     }
-//                 }
-//             }
-//             .frame(width: 110, height: 78)
-//             .padding(.vertical , 15)
-//             .clipped()
-//         }
-//         .frame(height: 78)
-//         .background(MemoMapTheme.inputBackground)
-//         .clipShape(RoundedRectangle(cornerRadius: 12))
-//         .overlay {
-//             RoundedRectangle(cornerRadius: 12)
-//                 .stroke(MemoMapTheme.inputBorder, lineWidth: 0.8)
-//         }
-//         .frame(maxWidth: .infinity)
-//    }
 }
 
 #Preview {
