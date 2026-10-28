@@ -14,6 +14,7 @@ struct MemoryDetailView: View {
     @StateObject private var viewModel: MemoryDetailViewModel
     @State private var showDeleteConfirmation = false
     @State private var showCreateCollage = false
+    
 
     var onUpdate: (() -> Void)? = nil
     var onDeleted: (() -> Void)? = nil
@@ -54,7 +55,7 @@ struct MemoryDetailView: View {
             )
             .background {
                 MemoMapTheme.background
-//                    .ignoresSafeArea()
+                    .ignoresSafeArea()
             }
 //            .clipped()
         }
@@ -108,9 +109,9 @@ struct MemoryDetailView: View {
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(MemoMapTheme.green.opacity(0.9))
+                        .foregroundStyle(MemoMapTheme.black)
                         .frame(width: 44, height: 44)
-                        .background(MemoMapTheme.White.opacity(0.6))
+                        .background(.white.opacity(0.95))
                         .clipShape(Circle())
                         .padding(.top,5)
                 }
@@ -118,6 +119,39 @@ struct MemoryDetailView: View {
                 .accessibilityLabel("Go back")
 
                 Spacer()
+
+
+                NavigationLink {
+                    UpdateMemoryView(memoryID: viewModel.memory.id)
+                } label: {
+                    Image(systemName: "square.and.pencil")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(MemoMapTheme.black)
+                        .frame(width: 44, height: 44)
+                        .background(.white.opacity(0.95))
+                        .clipShape(Circle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Update Memory")
+                .padding(.top, 5)
+                
+                Button {
+                    showCreateCollage = true
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "square.grid.2x2.fill")
+                            .font(.system(size: 18, weight: .semibold))
+
+                    }
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(MemoMapTheme.green)
+                    .frame(width: 44, height: 44)
+                    .background(.white.opacity(0.95))
+                    .clipShape(Circle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Collage Create")
+                .padding(.top, 5)
 
                 Button {
                     showDeleteConfirmation = true
@@ -195,7 +229,6 @@ struct MemoryDetailView: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             HStack(alignment: .top, spacing: 8) {
-//                Text(viewModel.formattedDate)
 
                 Image(systemName: "map.fill")
                     .font(.system(size: 11))
@@ -213,7 +246,7 @@ struct MemoryDetailView: View {
                ).isEmpty {
                 Text(description)
                     .font(MemoFont.dmSansRegular(15))
-                    .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.8))
+                    .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.9))
                     .fixedSize(horizontal: false, vertical: true)
                     .lineSpacing(3)
                     .padding(.top, 15)
@@ -228,36 +261,35 @@ struct MemoryDetailView: View {
                     }
                 }
                 .font(MemoFont.dmSansMedium(14))
-                .foregroundStyle(MemoMapTheme.green.opacity(1))
+                .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.8))
             }
             .padding(.top, 10)
-            
-            Button {
-                showCreateCollage = true
-            } label: {
-                HStack(spacing: 12) {
-                    Image(systemName: "square.grid.2x2.fill")
-                        .font(.system(size: 18, weight: .semibold))
-                    Text("Create Collage")
-                        .font(MemoFont.dmSansSemiBold(16))
-                    Spacer()
-                    Image(systemName: "arrow.right")
-                        .font(.system(size: 15, weight: .semibold))
-                }
-                .foregroundStyle(MemoMapTheme.White)
-                .padding(.horizontal, 20)
-                .frame(maxWidth: .infinity)
-                .frame(height: 56)
-                .background(MemoMapTheme.green)
-                .clipShape(Capsule())
-            }
-            .buttonStyle(.plain)
-            .padding(.top, 24)
+//
+//            Button {
+//                showCreateCollage = true
+//            } label: {
+//                HStack(spacing: 12) {
+//                    Image(systemName: "square.grid.2x2.fill")
+//                        .font(.system(size: 18, weight: .semibold))
+//                    Text("Create Collage")
+//                        .font(MemoFont.dmSansSemiBold(16))
+//                    Spacer()
+//                    Image(systemName: "arrow.right")
+//                        .font(.system(size: 15, weight: .semibold))
+//                }
+//                .foregroundStyle(MemoMapTheme.White)
+//                .padding(.horizontal, 20)
+//                .frame(maxWidth: .infinity)
+//                .frame(height: 56)
+//                .background(MemoMapTheme.green)
+//                .clipShape(Capsule())
+//            }
+//            .buttonStyle(.plain)
+//            .padding(.top, 24)
         }
         .padding(.horizontal, 16)
         .padding(.top, 30)
         .padding(.bottom, 30)
-        .frame(maxWidth: 520, alignment: .leading)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             UnevenRoundedRectangle(

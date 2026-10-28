@@ -40,7 +40,7 @@ struct LoginView: View {
 
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.top, 95)
+                        .padding(.top, 65)
 
                         VStack(alignment: .leading, spacing: 6) {
                             Text("Welcome back")

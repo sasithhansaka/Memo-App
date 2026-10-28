@@ -29,11 +29,11 @@ struct AppLockView: View {
                     .font(.system(size: 54))
 
                 Text("Unlock Memo")
-                    .font(.title2)
+                    .font(MemoFont.dmSansRegular(15))
                     .fontWeight(.semibold)
 
                 Text("Authenticate to access your memories.")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(MemoMapTheme.Textsecondary)
                     .multilineTextAlignment(.center)
 
                 Button("Authenticate") {

@@ -33,9 +33,9 @@ struct AddMemoryView: View {
             ScrollView {
 
                 VStack(alignment: .leading, spacing: 16) {
-
+                    
                     header
-
+                    
                     titleSection
                         .padding(.top ,5)
 
@@ -843,7 +843,6 @@ struct AddMemoryView: View {
     }
 
     private func dismissKeyboard() {
-
         UIApplication.shared.sendAction(
             #selector(
             UIResponder.resignFirstResponder

@@ -82,8 +82,8 @@ enum CollageBackground: String, CaseIterable, Identifiable {
     case white
     case green
     case dark
-    case pink
-    case blue
+    case midnightNavy
+    case darkForestGreen
     var id: String {
         rawValue
     }
@@ -93,8 +93,10 @@ enum CollageBackground: String, CaseIterable, Identifiable {
         case .white: return "White"
         case .green: return "Sage"
         case .dark: return "Dark"
-        case .pink: return "Pink"
-        case .blue: return "Blue"
+        case .midnightNavy:
+                   return "Midnight Navy"
+               case .darkForestGreen:
+                   return "Dark Forest"
         }
     }
     var color: Color {
@@ -107,10 +109,19 @@ enum CollageBackground: String, CaseIterable, Identifiable {
             return Color(red: 0.84, green: 0.89, blue: 0.82)
         case .dark:
             return Color(red: 0.10, green: 0.15, blue: 0.12)
-        case .pink:
-            return Color(red: 0.98, green: 0.87, blue: 0.88)
-        case .blue:
-            return Color(red: 0.84, green: 0.90, blue: 0.97)
+        case .midnightNavy:
+                    return Color(
+                        red: 23.0 / 255.0,
+                        green: 32.0 / 255.0,
+                        blue: 51.0 / 255.0
+                    )
+
+                case .darkForestGreen:
+                    return Color(
+                        red: 24.0 / 255.0,
+                        green: 58.0 / 255.0,
+                        blue: 50.0 / 255.0
+                    )
         }
     }
 }

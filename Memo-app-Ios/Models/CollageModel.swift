@@ -9,18 +9,21 @@ import Foundation
 import SwiftUI
 
 enum CollageTemplate: String, CaseIterable, Identifiable {
-    case classicGrid
+    
     case memoryStory
-    case filmStrip
     case scrapbook
+    case filmStrip
+    case classicGrid
     case travelJournal
+    
+    
     var id: String { rawValue }
     var title: String {
         switch self {
-        case .classicGrid: return "Classic Grid"
         case .memoryStory: return "Memory Story"
-        case .filmStrip: return "Film Strip"
         case .scrapbook: return "Scrapbook"
+        case .filmStrip: return "Film Strip"
+        case .classicGrid: return "Classic Grid"
         case .travelJournal: return "Travel Journal"
         }
     }

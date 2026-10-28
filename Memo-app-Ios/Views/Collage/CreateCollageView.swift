@@ -126,12 +126,11 @@ struct CreateCollageView: View {
             )
         }
     }
-    // MARK: - Preview
     private var previewSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Preview")
-                .font(MemoFont.dmSansSemiBold(18))
-                .foregroundStyle(MemoMapTheme.black)
+//            Text("Preview")
+//                .font(MemoFont.dmSansSemiBold(18))
+//                .foregroundStyle(MemoMapTheme.black)
             if let image = viewModel.exportedImage {
                 GeometryReader { geometry in
                     Image(uiImage: image)
@@ -171,7 +170,6 @@ struct CreateCollageView: View {
             }
         }
     }
-    // MARK: - Background Colors
     private var backgroundSection: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Background color")

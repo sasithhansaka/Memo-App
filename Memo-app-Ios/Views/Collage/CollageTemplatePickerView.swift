@@ -24,6 +24,7 @@ struct CollageTemplatePickerView: View {
             .frame(maxWidth: .infinity)
         }
     }
+    
     private func templateButton(
         _ template: CollageTemplate
     ) -> some View {
