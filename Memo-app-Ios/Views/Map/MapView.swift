@@ -63,7 +63,7 @@ struct MemoryMapView: View {
     private var header: some View {
         HStack(spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Google Map")
+                Text("Memories Map")
                     .font(MemoFont.dmSansRegular(34))
                     .foregroundStyle(MemoMapTheme.black)
                 Text("Explore your moments by place.")

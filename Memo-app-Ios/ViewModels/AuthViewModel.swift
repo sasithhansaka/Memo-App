@@ -16,8 +16,8 @@ final class AuthViewModel: ObservableObject {
     @Published var user: FirebaseAuth.User?
     @Published var fullName = ""
     @Published var isLoading = false
-    @Published var errormessage = ""
-
+    @Published var loginError = ""
+    @Published var registerError = ""
 
     private let db = Firestore.firestore()
     private var authListenerHandle: AuthStateDidChangeListenerHandle?
@@ -58,7 +58,7 @@ final class AuthViewModel: ObservableObject {
         confirmPassword: String
     ) async {
 
-        errormessage = ""
+        registerError = ""
 
         let cleanName = fullName.trimmingCharacters(
             in: .whitespacesAndNewlines
@@ -69,39 +69,43 @@ final class AuthViewModel: ObservableObject {
         )
 
         guard !cleanName.isEmpty else {
-            errormessage = "Please enter your full name."
+            registerError = "Please enter your full name."
             return
         }
-        
+
         guard !cleanEmail.isEmpty else {
-            errormessage = "Please enter a email."
-            return
-        }
-
-        guard !password.isEmpty else {
-            errormessage = "Please enter a password."
-            return
-        }
-
-        guard password.count >= 6 else {
-            errormessage = "Password must be at least 6 characters long."
-            return
-        }
-
-        guard password == confirmPassword else {
-            errormessage = "Passwords do not match."
+            registerError = "Please enter your email address."
             return
         }
 
         guard checkIsValidEmail(cleanEmail) else {
-            errormessage = "Please enter a valid email address."
+            registerError = "Please enter a valid email address."
+            return
+        }
+
+        guard !password.isEmpty else {
+            registerError = "Please enter a password."
+            return
+        }
+
+        guard password.count >= 8 else {
+            registerError = "Password must be at least 8 characters long."
+            return
+        }
+
+        guard !confirmPassword.isEmpty else {
+            registerError = "Please confirm your password."
+            return
+        }
+
+        guard password == confirmPassword else {
+            registerError = "Passwords do not match."
             return
         }
 
         isLoading = true
 
         do {
-
             let result = try await Auth.auth().createUser(
                 withEmail: cleanEmail,
                 password: password
@@ -122,12 +126,10 @@ final class AuthViewModel: ObservableObject {
                 .setData(userData)
 
             user = result.user
-
             isLoading = false
 
         } catch {
-
-            errormessage = firebaseErrorMessage(error)
+            registerError = firebaseErrorMessage(error)
             isLoading = false
         }
     }
@@ -137,44 +139,41 @@ final class AuthViewModel: ObservableObject {
         password: String
     ) async {
 
-        errormessage = ""
+        loginError = ""
 
         let cleanEmail = email.trimmingCharacters(
             in: .whitespacesAndNewlines
         )
 
         guard !cleanEmail.isEmpty else {
-            errormessage = "Please enter your email address."
-            return
-        }
-
-        guard !password.isEmpty else {
-            errormessage = "Please enter your password."
+            loginError = "Please enter your email address."
             return
         }
 
         guard checkIsValidEmail(cleanEmail) else {
-            errormessage = "Please enter a valid email address."
+            loginError = "Please enter a valid email address."
+            return
+        }
+
+        guard !password.isEmpty else {
+            loginError = "Please enter your password."
             return
         }
 
         isLoading = true
 
         do {
-
             let result = try await Auth.auth().signIn(
                 withEmail: cleanEmail,
                 password: password
             )
 
             user = result.user
-
             isLoading = false
 
         } catch {
-
+            loginError = firebaseErrorMessage(error)
             isLoading = false
-            errormessage = firebaseErrorMessage(error)
         }
     }
     
@@ -212,16 +211,14 @@ final class AuthViewModel: ObservableObject {
     func logout() {
 
         do {
-
             try Auth.auth().signOut()
-
             user = nil
             fullName=""
-            errormessage = ""
+            loginError = ""
+            registerError = ""
 
         } catch {
-
-            errormessage = error.localizedDescription
+            loginError = error.localizedDescription
         }
     }
 

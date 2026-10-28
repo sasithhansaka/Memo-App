@@ -54,9 +54,9 @@ struct MemoryDetailView: View {
             )
             .background {
                 MemoMapTheme.background
-                    .ignoresSafeArea()
+//                    .ignoresSafeArea()
             }
-            .clipped()
+//            .clipped()
         }
         .toolbar(.hidden, for: .navigationBar)
         .navigationDestination(isPresented: $showCreateCollage) {
@@ -172,7 +172,7 @@ struct MemoryDetailView: View {
                                 .fill(
                                     viewModel.selectedPhotoIndex == index
                                     ? MemoMapTheme.green
-                                    : MemoMapTheme.green.opacity(0.7)
+                                    : MemoMapTheme.green.opacity(0.5)
                                 )
                                 .frame(width: 7, height: 7)
                         }

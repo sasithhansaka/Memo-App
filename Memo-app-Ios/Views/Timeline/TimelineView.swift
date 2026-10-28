@@ -7,6 +7,8 @@
 //
 import SwiftUI
 struct TimelineView: View {
+    
+    @State private var selectedPhotoIndices: [String: Int] = [:]
     @StateObject private var viewModel = TimelineViewModel()
     @State private var selectedYear: Int? = nil
     @State private var expandedDescriptions: Set<String> = []
@@ -217,37 +219,89 @@ struct TimelineView: View {
     }
     
     private func memoryPhotoCarousel(_ memory: Memory) -> some View {
-        GeometryReader { geometry in
-            let availableWidth = geometry.size.width
-            Group {
-                if let image = MemoryImageEncoder.decode(
-                    memory.coverPhotoBase64
-                ) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(
-                            width: availableWidth,
-                            height: 345
-                        )
-                        .clipped()
-                } else {
+
+        let memoryID = String(describing: memory.id)
+
+        let photoData = memory.photoBase64.flatMap { photos in
+            photos.isEmpty ? nil : photos
+        } ?? [memory.coverPhotoBase64]
+
+        let images = photoData.enumerated().compactMap { index, base64 in
+            MemoryImageEncoder.decode(base64).map { (index, $0) }
+        }
+
+        let currentIndex = selectedPhotoIndices[memoryID] ?? 0
+
+        return GeometryReader { geometry in
+
+            ZStack(alignment: .bottom) {
+
+                if images.isEmpty {
+
                     ZStack {
                         MemoMapTheme.lightGreen
+
                         Image(systemName: "photo")
                             .font(.system(size: 36))
                             .foregroundStyle(MemoMapTheme.green)
                     }
                     .frame(
-                        width: availableWidth,
-                        height: 345
+                        width: geometry.size.width,
+                        height: geometry.size.height
                     )
-                    .clipped()
+
+                } else {
+
+                    TabView(
+                        selection: Binding(
+                            get: {
+                                currentIndex
+                            },
+                            set: { newIndex in
+                                selectedPhotoIndices[memoryID] = newIndex
+                            }
+                        )
+                    ) {
+
+                        ForEach(images, id: \.0) { item in
+
+                            Image(uiImage: item.1)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(
+                                    width: geometry.size.width,
+                                    height: geometry.size.height
+                                )
+                                .clipped()
+                                .tag(item.0)
+                        }
+                    }
+                    .tabViewStyle(.page(indexDisplayMode: .never))
+
+                    if images.count > 1 {
+
+                        HStack(spacing: 7) {
+
+                            ForEach(images, id: \.0) { item in
+
+                                Circle()
+                                    .fill(
+                                        currentIndex == item.0
+                                        ? MemoMapTheme.green
+                                        : MemoMapTheme.green.opacity(0.5)
+                                    )
+                                    .frame(width: 7, height: 7)
+                            }
+                        }
+                        .padding(.bottom, 10)
+                    }
                 }
             }
-            .clipShape(
-                RoundedRectangle(cornerRadius: 0)
+            .frame(
+                width: geometry.size.width,
+                height: geometry.size.height
             )
+            .clipped()
         }
         .frame(height: 325)
         .frame(maxWidth: .infinity)

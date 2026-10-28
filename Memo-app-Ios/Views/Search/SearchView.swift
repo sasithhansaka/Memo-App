@@ -69,7 +69,7 @@ struct SearchView: View {
             MemoMapTheme.background
                 .ignoresSafeArea()
         }
-        .clipped()
+//        .clipped()
         
          .navigationBarBackButtonHidden(true)
          .toolbarBackground(.hidden, for: .navigationBar)

@@ -8,291 +8,366 @@
 import SwiftUI
 
 struct RegisterView: View {
-    
-    @EnvironmentObject var auth : AuthViewModel
-    
+
+    @EnvironmentObject var auth: AuthViewModel
+
+    @State private var fullNameError: String?
+    @State private var emailError: String?
+    @State private var passwordError: String?
+    @State private var confirmPasswordError: String?
+
     @State private var fullName = ""
     @State private var email = ""
     @State private var password = ""
     @State private var confirmPassword = ""
-    
-    
+
+    @State private var showLoginView = false
+
     var body: some View {
-        
         ZStack {
-            
             MemoMapTheme.background
                 .ignoresSafeArea()
-            
-            ScrollView {
-                
+
+            ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
-                                        
-                    VStack(spacing: 0) {
-                        
-                        Image("LOGO")
+
+                    VStack(spacing: 10) {
+                        Image("logo-momento")
                             .resizable()
                             .scaledToFit()
-                            .frame(
-                                width: 150,
-                                height: 150
-                            )
-                        
-//                        Text("MEMOMAP")
-//                            .font(
-//                                .system(
-//                                    size: 8,
-//                                    weight: .medium
-//                                )
-//                            )
-//                            .foregroundStyle(
-//                                MemoMapTheme.green
-//                            )
-//                            .padding(.top, -1)
+                            .frame(width: 140, height: 140)
+                            .accessibilityLabel("MemoMap logo")
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.top, 20)
-                    
-                                        
-                    VStack(
-                        alignment: .leading,
-                        spacing: 3
-                    ) {
-                        
+                    .padding(.top, 40)
+
+                    VStack(alignment: .leading, spacing: 6) {
                         Text("Create your account")
-                            .font(.system(size: 28, weight: .bold))
+                            .font(MemoFont.dmSansSemiBold(32))
                             .foregroundStyle(MemoMapTheme.black)
-                        
-                        Text(
-                            "Start collecting memories that matter."
-                        )
-                        .font(.system(size: 14))
-                        .foregroundStyle(MemoMapTheme.Textsecondary)
+
+                        Text("Start collecting memories that matter.")
+                            .font(MemoFont.dmSansRegular(14))
+                            .foregroundStyle(MemoMapTheme.Textsecondary)
+                            .fixedSize(
+                                horizontal: false,
+                                vertical: true
+                            )
                     }
-                    .padding(.top, 12)
-                    
-                                        
+                    .padding(.top, 25)
+                    .padding(.bottom, 30)
+
                     MemoMapTextField(
                         title: "Full name",
                         placeholder: "Your name",
-                        text: $fullName
+                        text: $fullName,
+                        error: fullNameError
                     )
-                    .padding(.top, 24)
-                    
-                                        
+                    .onChange(of: fullName) {
+                        fullNameError = nil
+                        auth.registerError = ""
+                    }
+
                     MemoMapTextField(
-                        title: "Email",
+                        title: "Email address",
                         placeholder: "you@example.com",
-                        text: $email
+                        text: $email,
+                        error: emailError
                     )
                     .keyboardType(.emailAddress)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
-                    .padding(.top, 16)
-                    
-                                    
+                    .padding(.top, 18)
+                    .onChange(of: email) {
+                        emailError = nil
+                        auth.registerError = ""
+                    }
+
                     MemoMapSecureField(
                         title: "Password",
                         placeholder: "Create a password",
-                        text: $password
+                        text: $password,
+                        error: passwordError
                     )
-                    .padding(.top, 16)
-                    
-                                    
+                    .padding(.top, 18)
+                    .onChange(of: password) {
+                        passwordError = nil
+                        auth.registerError = ""
+
+                        if !confirmPassword.isEmpty {
+                            confirmPasswordError = nil
+                        }
+                    }
+
                     MemoMapSecureField(
                         title: "Confirm password",
                         placeholder: "Repeat your password",
-                        text: $confirmPassword
+                        text: $confirmPassword,
+                        error: confirmPasswordError
                     )
-                    .padding(.top, 16)
-                
-                    if !auth.errormessage.isEmpty {
-                        
-                        Text(auth.errormessage)
-                            .font(.system(size: 10))
+                    .padding(.top, 18)
+                    .onChange(of: confirmPassword) {
+                        confirmPasswordError = nil
+                        auth.registerError = ""
+                    }
+
+                    if !auth.registerError.isEmpty {
+                        Text(auth.registerError)
+                            .font(MemoFont.dmSansRegular(12))
                             .foregroundStyle(.red)
+                            .fixedSize(
+                                horizontal: false,
+                                vertical: true
+                            )
                             .padding(.top, 12)
                     }
-                    
+
                     Button {
-                        
+                        auth.registerError = ""
+
+                        guard validateRegisterForm() else {
+                            return
+                        }
+
                         Task {
-                            
                             await auth.register(
-                                fullName: fullName,
-                                email: email,
+                                fullName: fullName.trimmingCharacters(
+                                    in: .whitespacesAndNewlines
+                                ),
+                                email: email.trimmingCharacters(
+                                    in: .whitespacesAndNewlines
+                                ),
                                 password: password,
                                 confirmPassword: confirmPassword
                             )
                         }
-                        
+
                     } label: {
-                        
-                        Group {
+                        HStack(spacing: 10) {
                             if auth.isLoading {
                                 ProgressView()
-                                    .tint(.white)
+                                    .tint(MemoMapTheme.White)
                             } else {
                                 Text("Create Account")
+                                    .font(MemoFont.dmSansBold(16))
                             }
                         }
-                        .font(
-                            .system(
-                                size: 13,
-                                weight: .medium
-                            )
-                        )
-                        .foregroundStyle(.white)
+                        .foregroundStyle(MemoMapTheme.White)
                         .frame(maxWidth: .infinity)
-                        .frame(height: 40)
-                        .background(
-                            MemoMapTheme.green
-                        )
+                        .frame(height: 56)
+                        .background(MemoMapTheme.green)
                         .clipShape(Capsule())
                     }
+                    .buttonStyle(.plain)
                     .disabled(auth.isLoading)
-                    .padding(.top, 20)
-                    
-                    HStack(spacing: 4) {
-                        
+                    .opacity(auth.isLoading ? 0.75 : 1)
+                    .padding(.top, 30)
+
+                    HStack(spacing: 5) {
                         Text("Already have an account?")
-                        
-                        NavigationLink {
-                            LoginView()
+                            .font(MemoFont.dmSansRegular(13))
+                            .foregroundStyle(
+                                MemoMapTheme.Textsecondary.opacity(0.9)
+                            )
+
+                        Button {
+                            showLoginView = true
                         } label: {
                             Text("Sign in")
-                                .foregroundStyle(
-                                    MemoMapTheme.green
-                                )
+                                .font(MemoFont.dmSansBold(13))
+                                .foregroundStyle(MemoMapTheme.green)
+                        }
+                        .fullScreenCover(isPresented: $showLoginView) {
+                            LoginView()
+                                .environmentObject(auth)
                         }
                     }
-                    .font(
-                        .system(
-                            size: 11,
-                            weight: .medium
-                        )
-                    )
-                    .foregroundStyle(
-                        MemoMapTheme.Textsecondary
-                    )
                     .frame(maxWidth: .infinity)
-                    .padding(.top, 24)
-                    
-                    Spacer(minLength: 30)
+                    .padding(.top, 22)
+                    .padding(.bottom, 30)
                 }
-                .padding(.horizontal, 29)
+                .padding(.horizontal, 28)
             }
+            .scrollDismissesKeyboard(.interactively)
         }
         .preferredColorScheme(.light)
     }
-}
 
+    private func validateRegisterForm() -> Bool {
 
+        fullNameError = nil
+        emailError = nil
+        passwordError = nil
+        confirmPasswordError = nil
 
-struct MemoMapTextField: View {
-    
-let title: String
-let placeholder: String
-@Binding var text: String
-
-var body: some View {
-    
-    VStack(
-        alignment: .leading,
-        spacing: 6
-    ) {
-        
-        Text(title)
-            .font(
-                .system(
-                    size:11,
-                    weight: .medium
-                )
-            )
-            .foregroundStyle(
-                MemoMapTheme.Textsecondary
-            )
-        
-        TextField(
-            placeholder,
-            text: $text
+        let cleanName = fullName.trimmingCharacters(
+            in: .whitespacesAndNewlines
         )
-        .font(.system(size: 13))
-//        .padding(.horizontal, 12)
-//        .frame(height: 38)
-        .padding(.horizontal, 14)
-        .frame(height: 42)
-//
-//        .frame(maxWidth: .infinity)
-//        .frame(height: 40)
-        .background(
-            MemoMapTheme.inputBackground
+
+        let cleanEmail = email.trimmingCharacters(
+            in: .whitespacesAndNewlines
         )
-        .overlay {
-            RoundedRectangle(cornerRadius: 13)
-                .stroke(
-                    MemoMapTheme.inputBorder,
-                    lineWidth: 1
-                )
+
+        var isValid = true
+
+        // Validate full name
+
+        if cleanName.isEmpty {
+            fullNameError = "Please enter your full name."
+            isValid = false
         }
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: 13
-            )
-        )
+
+
+        if cleanEmail.isEmpty {
+            emailError = "Please enter your email address."
+            isValid = false
+        } else if !isValidEmail(cleanEmail) {
+            emailError = "Please enter a valid email address."
+            isValid = false
+        }
+
+        if password.isEmpty {
+            passwordError = "Please enter a password."
+            isValid = false
+        } else if password.count < 8 {
+            passwordError = "Password must be at least 8 characters long."
+            isValid = false
+        }
+
+        if confirmPassword.isEmpty {
+            confirmPasswordError = "Please confirm your password."
+            isValid = false
+        } else if password != confirmPassword {
+            confirmPasswordError = "Passwords do not match."
+            isValid = false
+        }
+
+        return isValid
+    }
+
+    private func isValidEmail(_ email: String) -> Bool {
+
+        let emailRegex =
+            #"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#
+
+        return email.range(
+            of: emailRegex,
+            options: .regularExpression
+        ) != nil
     }
 }
+
+struct MemoMapTextField: View {
+
+    let title: String
+    let placeholder: String
+
+    @Binding var text: String
+
+    var error: String? = nil
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 9) {
+
+            Text(title)
+                .font(MemoFont.dmSansBold(15))
+                .foregroundStyle(MemoMapTheme.black)
+
+            TextField(
+                text: $text,
+                prompt: Text(placeholder)
+                    .foregroundColor(MemoMapTheme.Textsecondary.opacity(0.7))
+            ) {
+                Text(placeholder)
+            }
+            .font(MemoFont.dmSansRegular(15))
+            .foregroundStyle(MemoMapTheme.black)
+            .padding(.horizontal, 15)
+            .frame(height: 52)
+            .background(MemoMapTheme.inputBackground)
+            .clipShape(
+                RoundedRectangle(cornerRadius: 12)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(
+                        error == nil
+                            ? MemoMapTheme.inputBorder
+                        : Color.red.opacity(0.7),
+                        lineWidth: 0.7
+                    )
+            }
+
+            if let error, !error.isEmpty {
+                Text(error)
+                    .font(MemoFont.dmSansRegular(12))
+                    .foregroundStyle(.red)
+                    .fixedSize(
+                        horizontal: false,
+                        vertical: true
+                    )
+            }
+        }
+    }
 }
 
 struct MemoMapSecureField: View {
-    
+
     let title: String
     let placeholder: String
+
     @Binding var text: String
-    
+
+    var error: String? = nil
+
     var body: some View {
-        
-        VStack(
-            alignment: .leading,
-            spacing: 6
-        ) {
-            
+        VStack(alignment: .leading, spacing: 9) {
+
             Text(title)
-                .font(
-                    .system(
-                        size: 11,
-                        weight: .medium
-                    )
-                )
-                .foregroundStyle(
-                    MemoMapTheme.Textsecondary
-                )
-            
+                .font(MemoFont.dmSansBold(15))
+                .foregroundStyle(MemoMapTheme.black)
+
             SecureField(
-                placeholder,
-                text: $text
-            )
-            .font(.system(size: 13))
-            .padding(.horizontal, 14)
-            .frame(height: 42)
-            .background(
-                MemoMapTheme.inputBackground
+                text: $text,
+                prompt: Text(placeholder)
+                    .foregroundColor(MemoMapTheme.Textsecondary.opacity(0.7))
+            ) {
+                Text(placeholder)
+            }
+            .font(MemoFont.dmSansRegular(15))
+            .foregroundStyle(MemoMapTheme.black)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+            .textContentType(.newPassword)
+            .padding(.horizontal, 15)
+            .frame(height: 52)
+            .background(MemoMapTheme.inputBackground)
+            .clipShape(
+                RoundedRectangle(cornerRadius: 12)
             )
             .overlay {
-                RoundedRectangle(cornerRadius: 13)
+                RoundedRectangle(cornerRadius: 12)
                     .stroke(
-                        MemoMapTheme.inputBorder,
-                        lineWidth: 1
+                        error == nil
+                            ? MemoMapTheme.inputBorder
+                        : Color.red.opacity(0.7),
+                        lineWidth: 0.7
                     )
             }
-            .clipShape(
-                RoundedRectangle(
-                    cornerRadius: 13
-                )
-            )
+
+            if let error, !error.isEmpty {
+                Text(error)
+                    .font(MemoFont.dmSansRegular(12))
+                    .foregroundStyle(.red)
+                    .fixedSize(
+                        horizontal: false,
+                        vertical: true
+                    )
+            }
         }
     }
 }
+
 
 #Preview {
     RegisterView()

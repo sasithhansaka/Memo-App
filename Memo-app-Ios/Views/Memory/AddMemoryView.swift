@@ -62,14 +62,11 @@ struct AddMemoryView: View {
                         errorBanner(errorMessage)
 
                     }
-
                     saveButton
-
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 15)
                 .padding(.top, 20)
                 .padding(.bottom, 30)
-
             }
 
             .scrollDismissesKeyboard(.interactively)
@@ -85,7 +82,6 @@ struct AddMemoryView: View {
             ) {
 
                 MemoryLocationPickerView {
-
                     name,
                     selectedLatitude,
                     selectedLongitude in
@@ -164,7 +160,6 @@ struct AddMemoryView: View {
                     .foregroundStyle(MemoMapTheme.Textsecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
-
             Spacer(minLength: 2)
 
         }
@@ -179,42 +174,33 @@ struct AddMemoryView: View {
             sectionTitle("Title", required: true)
 
             TextField(
-
-                "e.g. A day with my friends",
                 text: Binding(
                     get: { viewModel.title },
                     set: { viewModel.updateTitle($0) }
-
-                )
-
-            )
-
+                ),
+                prompt: Text("e.g. A day with my friends")
+                    .foregroundColor(MemoMapTheme.Textsecondary.opacity(0.7))
+            ) {
+                Text("e.g. A day with my friends")
+            }
             .font(MemoFont.dmSansRegular(15))
             .foregroundStyle(MemoMapTheme.black)
             .focused($focusedField, equals: .title)
             .submitLabel(.done)
             .padding(14)
             .background(MemoMapTheme.inputBackground)
-
             .clipShape(
                 RoundedRectangle(cornerRadius: 12)
-
             )
-
             .overlay {
-
                 RoundedRectangle(cornerRadius: 12)
-
                     .stroke(
                         viewModel.titleError == nil
-
                             ? MemoMapTheme.inputBorder
                             : Color.red.opacity(0.6),
                         lineWidth: 0.7
                     )
-
             }
-
             .accessibilityLabel("Memory title")
             .accessibilityHint("Enter a title up to 80 characters.")
 
@@ -236,35 +222,34 @@ struct AddMemoryView: View {
 
                 if viewModel.description.isEmpty {
                     Text("Write your memory description...")
-                        .foregroundStyle(MemoMapTheme.black)
+                        .foregroundColor(MemoMapTheme.Textsecondary.opacity(0.7))
+                        .font(MemoFont.dmSansRegular(15))
                         .padding(.horizontal, 12)
                         .padding(.vertical, 16)
 
                 }
-
                 TextEditor(
                     text: Binding(
                         get: { viewModel.description },
                         set: { viewModel.updateDescription($0) }
                     )
                 )
-
+                .font(MemoFont.dmSansRegular(15))
+                 .foregroundStyle(MemoMapTheme.black)
                 .focused(
                     $focusedField,
                     equals: .description
                 )
 
                 .scrollContentBackground(.hidden)
-                .frame(minHeight: 110)
+                .frame(minHeight: 90)
                 .padding(8)
 
             }
-
             .background(MemoMapTheme.inputBackground)
             .clipShape(
                 RoundedRectangle(cornerRadius: 12)
             )
-
             .overlay {
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(
@@ -284,23 +269,16 @@ struct AddMemoryView: View {
                             ? "stop.circle.fill"
                             : "mic.fill"
                     )
-
                     .font(.caption)
-
                     Text(
-
                         speech.isRecording
                             ? "Stop dictation"
                             : "Dictate description"
 
                     )
-
-                    .font(.headline)
-
+                    .font(MemoFont.dmSansRegular(15))
                     Spacer()
-
                     if speech.isRecording {
-
                         Circle()
                             .fill(.red)
                             .frame(width: 8, height: 8)
@@ -309,7 +287,7 @@ struct AddMemoryView: View {
 
                 }
 
-                .foregroundStyle(MemoMapTheme.Textsecondary)
+                .foregroundStyle(MemoMapTheme.green.opacity(1))
                 .padding(.vertical, 6)
                 .contentShape(Rectangle())
 
@@ -318,28 +296,20 @@ struct AddMemoryView: View {
             .buttonStyle(.plain)
             if speech.isRecording {
                 Text("Listening… your words appear as you speak.")
-                    .font(.caption)
-
+                    .font(MemoFont.dmSansRegular(12))
                     .foregroundStyle(MemoMapTheme.Textsecondary)
-
             }
 
             if let speechError = speech.errorMessage {
-
                 Text(speechError)
-
-                    .font(.caption)
-
+                    .font(MemoFont.dmSansRegular(12))
                     .foregroundStyle(.red)
 
             }
-
+            
             Text("Typing and speech-to-text are both supported.")
-
-                .font(.caption)
-
-                .foregroundStyle(.secondary)
-
+                .font(MemoFont.dmSansRegular(12))
+                .foregroundStyle(MemoMapTheme.Textsecondary)
         }
 
     }
@@ -364,6 +334,7 @@ struct AddMemoryView: View {
         }
 
     }
+    
     private var photosSection: some View {
 
         VStack(alignment: .leading, spacing: 12) {
@@ -381,9 +352,7 @@ struct AddMemoryView: View {
             ) {
 
                 Label(
-
                     "Choose Photos",
-
                     systemImage: "photo.on.rectangle.angled"
 
                 )
@@ -435,7 +404,7 @@ struct AddMemoryView: View {
                             viewModel.photos.indices,
                             id: \.self
                         ) { index in
-
+                            
                             VStack(
                                 alignment: .leading,
                                 spacing: 6
@@ -517,16 +486,11 @@ struct AddMemoryView: View {
             }
 
             if viewModel.isLoadingPhotos {
-
-                HStack(spacing: 8) {
-
+            HStack(spacing: 8) {
                     ProgressView()
-
-                    Text("Loading selected photos...")
-
-                        .font(.caption)
-
-                        .foregroundStyle(.secondary)
+                Text("Loading selected photos...")
+                    .font(MemoFont.dmSansRegular(12))
+                    .foregroundStyle(MemoMapTheme.Textsecondary)
 
                 }
 
@@ -535,24 +499,18 @@ struct AddMemoryView: View {
             if viewModel.isReadingOCR {
 
                 HStack(spacing: 8) {
-
                     ProgressView()
-
                     Text("Extracting text from photos...")
-
-                        .font(.caption)
-
-                        .foregroundStyle(.secondary)
+                        .font(MemoFont.dmSansRegular(12))
+                        .foregroundStyle(MemoMapTheme.Textsecondary)
 
                 }
 
             }
 
             Text("Add at least one photo. You can select up to 10.")
-
-                .font(.caption)
-
-                .foregroundStyle(.secondary)
+                .font(MemoFont.dmSansRegular(12))
+                .foregroundStyle(MemoMapTheme.Textsecondary)
 
         }
 
@@ -562,11 +520,8 @@ struct AddMemoryView: View {
 
         VStack(alignment: .leading, spacing: 10) {
 
-            //            sectionTitle("Detected text", required: false)
             if viewModel.ocrTags.isEmpty {
-                //                Text("Text detected in your photos will appear here.")
-                //                    .font(.caption)
-                //                    .foregroundStyle(.secondary)
+       
             } else {
                 ScrollView(
                     .horizontal,
@@ -583,7 +538,7 @@ struct AddMemoryView: View {
                         ) { _, word in
                             Text(word)
                                 .font(.subheadline)
-                                .foregroundStyle(MemoMapTheme.Textsecondary)
+                                .foregroundStyle(MemoMapTheme.inputBackground)
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 8)
                                 .background(
@@ -605,11 +560,9 @@ struct AddMemoryView: View {
     private var categorySection: some View {
 
         VStack(alignment: .leading, spacing: 8) {
-
             sectionTitle("Category", required: true)
             Menu {
                 ForEach(
-
                     viewModel.categories,
                     id: \.self
                 ) { item in
@@ -634,18 +587,14 @@ struct AddMemoryView: View {
                 HStack {
                     Text(
                         viewModel.category.isEmpty
-
                             ? "Select a category"
-
                             : viewModel.category
-
                     )
-
+                    .font(MemoFont.dmSansRegular(15))
                     .foregroundStyle(
-
                         viewModel.category.isEmpty
-                        ? MemoMapTheme.Textsecondary
-                        : MemoMapTheme.Textsecondary
+                        ? MemoMapTheme.Textsecondary.opacity(0.7)
+                            : MemoMapTheme.black
                     )
 
                     Spacer()
@@ -665,27 +614,21 @@ struct AddMemoryView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(
                             viewModel.categoryError == nil
-                                ? Color.gray.opacity(0.2)
+                            ? MemoMapTheme.inputBorder
                                 : Color.red.opacity(0.7),
 
-                            lineWidth: 1
+                            lineWidth: 0.7
 
                         )
-
                 }
 
             }
-
-            .accessibilityLabel("Memory category")
-            
+           .accessibilityLabel("Memory category")
             if let categoryError = viewModel.categoryError {
 
                 fieldError(categoryError)
-
             }
-
         }
-
     }
 
     private var dateSection: some View {
@@ -693,29 +636,37 @@ struct AddMemoryView: View {
         VStack(alignment: .leading, spacing: 8) {
 
             sectionTitle("Memory date", required: true)
-
             DatePicker(
                 "Date",
                 selection: $viewModel.memoryDate,
+                in: ...Date(),
                 displayedComponents: [.date]
             )
 
             .datePickerStyle(.compact)
+            .font(MemoFont.dmSansRegular(15))
             .padding(12)
             .background(MemoMapTheme.inputBackground)
             .clipShape(
                 RoundedRectangle(cornerRadius: 12)
             )
+            .overlay {
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(
+                        MemoMapTheme.inputBorder,
+
+                        lineWidth: 0.7
+                    )
+            }
             .foregroundStyle(MemoMapTheme.Textsecondary)
+            .tint(MemoMapTheme.green)
 
         }
-
     }
 
     private var locationSection: some View {
 
         VStack(alignment: .leading, spacing: 8) {
-
             sectionTitle("Location", required: true)
             Button {
             focusedField = nil
@@ -724,8 +675,7 @@ struct AddMemoryView: View {
             } label: {
 
                 HStack(spacing: 12) {
-
-                    Image(systemName: "mappin.and.ellipse")
+                    Image(systemName: "map")
                         .font(.title3)
                         .foregroundStyle(MemoMapTheme.Textsecondary)
 
@@ -740,20 +690,25 @@ struct AddMemoryView: View {
                             viewModel.placeName ??
                                 "Select a location"
                         )
-                        .foregroundStyle(.primary)
+                        .font(MemoFont.dmSansRegular(15))
+                        .foregroundStyle(
+                            viewModel.placeName == nil
+                                ? MemoMapTheme.Textsecondary
+                                : MemoMapTheme.black
+                        )
+                        
                         Text(
                             viewModel.placeName == nil
                                 ? "Choose a place on the map."
                                 : "Location attached to this memory."
                         )
 
-                        .font(.caption)
+                        .font(MemoFont.dmSansRegular(12))
                         .foregroundStyle(MemoMapTheme.Textsecondary)
                     }
 
                 Spacer()
                     Image(systemName: "chevron.right")
-
                         .foregroundStyle(.secondary)
                 }
 
@@ -761,7 +716,15 @@ struct AddMemoryView: View {
                 .background(MemoMapTheme.inputBackground)
                 .clipShape(
                     RoundedRectangle(cornerRadius: 12)
-            )
+                )
+
+                .overlay {
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(
+                            MemoMapTheme.inputBorder,
+                            lineWidth: 0.7
+                        )
+                }
             }
             .buttonStyle(.plain)
 
@@ -781,7 +744,6 @@ struct AddMemoryView: View {
         HStack(
             alignment: .top,
             spacing: 6
-
         ) {
             Image(systemName: "exclamationmark.circle.fill")
                 .font(.system(size: 13))
@@ -871,7 +833,7 @@ struct AddMemoryView: View {
 
         HStack(spacing: 4) {
             Text(text)
-                .font(MemoFont.dmSansSemiBold(16))
+                .font(MemoFont.dmSansBold(15))
                 .foregroundStyle(MemoMapTheme.black)
             if required {
                 Text("*")

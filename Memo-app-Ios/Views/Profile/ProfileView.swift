@@ -148,6 +148,12 @@ struct ProfileView: View {
                         }
 
                         Spacer(minLength: 30)
+                    
+                      Text("App Version : 1.0.V ")
+                        .font(MemoFont.dmSansRegular(12))
+                        .foregroundStyle(MemoMapTheme.Textsecondary.opacity(0.7))
+                    
+                    
                     }
                 .padding(.horizontal, 15)
                 .padding(.top, 20)
