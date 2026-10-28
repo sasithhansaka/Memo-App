@@ -16,6 +16,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D7F18E9B309211CD00B6F333 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D7D8E72A306E240A007CF230 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D7D8E731306E240A007CF230;
+			remoteInfo = "Memo-app-Ios";
+		};
 		D7FB565130906A2C004291DB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D7D8E72A306E240A007CF230 /* Project object */;
@@ -41,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		D7D8E732306E240A007CF230 /* Memo-app-Ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Memo-app-Ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7F18E97309211CD00B6F333 /* Memo-app-IosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Memo-app-IosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7FB563D30906A2B004291DB /* MemoAppWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MemoAppWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7FB563F30906A2B004291DB /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		D7FB564130906A2B004291DB /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -89,6 +97,11 @@
 			path = "Memo-app-Ios";
 			sourceTree = "<group>";
 		};
+		D7F18E98309211CD00B6F333 /* Memo-app-IosTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Memo-app-IosTests";
+			sourceTree = "<group>";
+		};
 		D7FB564330906A2B004291DB /* MemoAppWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -111,6 +124,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D7F18E94309211CD00B6F333 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D7FB563A30906A2B004291DB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -129,6 +149,7 @@
 				D7FB565930906AC9004291DB /* MemoAppWidgetExtension.entitlements */,
 				D7D8E734306E240A007CF230 /* Memo-app-Ios */,
 				D7FB564330906A2B004291DB /* MemoAppWidget */,
+				D7F18E98309211CD00B6F333 /* Memo-app-IosTests */,
 				D7FB563E30906A2B004291DB /* Frameworks */,
 				D7D8E733306E240A007CF230 /* Products */,
 			);
@@ -139,6 +160,7 @@
 			children = (
 				D7D8E732306E240A007CF230 /* Memo-app-Ios.app */,
 				D7FB563D30906A2B004291DB /* MemoAppWidgetExtension.appex */,
+				D7F18E97309211CD00B6F333 /* Memo-app-IosTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -182,6 +204,29 @@
 			productReference = D7D8E732306E240A007CF230 /* Memo-app-Ios.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D7F18E96309211CD00B6F333 /* Memo-app-IosTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D7F18E9D309211CD00B6F333 /* Build configuration list for PBXNativeTarget "Memo-app-IosTests" */;
+			buildPhases = (
+				D7F18E93309211CD00B6F333 /* Sources */,
+				D7F18E94309211CD00B6F333 /* Frameworks */,
+				D7F18E95309211CD00B6F333 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D7F18E9C309211CD00B6F333 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D7F18E98309211CD00B6F333 /* Memo-app-IosTests */,
+			);
+			name = "Memo-app-IosTests";
+			packageProductDependencies = (
+			);
+			productName = "Memo-app-IosTests";
+			productReference = D7F18E97309211CD00B6F333 /* Memo-app-IosTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		D7FB563C30906A2B004291DB /* MemoAppWidgetExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D7FB565430906A2C004291DB /* Build configuration list for PBXNativeTarget "MemoAppWidgetExtension" */;
@@ -217,6 +262,10 @@
 					D7D8E731306E240A007CF230 = {
 						CreatedOnToolsVersion = 26.2;
 					};
+					D7F18E96309211CD00B6F333 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = D7D8E731306E240A007CF230;
+					};
 					D7FB563C30906A2B004291DB = {
 						CreatedOnToolsVersion = 26.2;
 					};
@@ -241,12 +290,20 @@
 			targets = (
 				D7D8E731306E240A007CF230 /* Memo-app-Ios */,
 				D7FB563C30906A2B004291DB /* MemoAppWidgetExtension */,
+				D7F18E96309211CD00B6F333 /* Memo-app-IosTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D7D8E730306E240A007CF230 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D7F18E95309211CD00B6F333 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -270,6 +327,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D7F18E93309211CD00B6F333 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D7FB563930906A2B004291DB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -280,6 +344,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D7F18E9C309211CD00B6F333 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D7D8E731306E240A007CF230 /* Memo-app-Ios */;
+			targetProxy = D7F18E9B309211CD00B6F333 /* PBXContainerItemProxy */;
+		};
 		D7FB565230906A2C004291DB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D7FB563C30906A2B004291DB /* MemoAppWidgetExtension */;
@@ -499,6 +568,48 @@
 			};
 			name = Release;
 		};
+		D7F18E9E309211CD00B6F333 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6YF2HPTXY9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Sasith.Memo-app-IosTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Memo-app-Ios.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Memo-app-Ios";
+			};
+			name = Debug;
+		};
+		D7F18E9F309211CD00B6F333 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6YF2HPTXY9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Sasith.Memo-app-IosTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Memo-app-Ios.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Memo-app-Ios";
+			};
+			name = Release;
+		};
 		D7FB565530906A2C004291DB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -580,6 +691,15 @@
 			buildConfigurations = (
 				D7D8E73E306E240B007CF230 /* Debug */,
 				D7D8E73F306E240B007CF230 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D7F18E9D309211CD00B6F333 /* Build configuration list for PBXNativeTarget "Memo-app-IosTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D7F18E9E309211CD00B6F333 /* Debug */,
+				D7F18E9F309211CD00B6F333 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
