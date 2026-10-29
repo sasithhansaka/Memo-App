@@ -136,6 +136,7 @@ struct AddMemoryView: View {
 
                 Button("Done") {
                     speech.stopRecording()
+                    viewModel.resetForm()
                     dismiss()
 
                 }

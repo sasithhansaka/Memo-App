@@ -248,6 +248,18 @@ final class LocationNotificationManager: NSObject,
             locationManager.startMonitoring(for: region)
         }
     }
+    
+    private func isMemoryOldEnough(createdAt: Date) -> Bool {
+        guard let cutoff = Calendar.current.date(
+            byAdding: .day,
+            value: -30,
+            to: Date()
+        ) else {
+            return false
+        }
+
+        return createdAt <= cutoff
+    }
 
     private func isEligible(notifyDate: Date?) -> Bool {
         guard let notifyDate else { return true }
@@ -298,6 +310,26 @@ final class LocationNotificationManager: NSObject,
             else {
                 return
             }
+            
+            guard
+                  let createdAtTimestamp = data["createdAt"] as? Timestamp
+              else {
+                  print(
+                      "Notification skipped: Missing createdAt for memory:",
+                      memoryID
+                  )
+                  return
+              }
+            
+            let createdAt = createdAtTimestamp.dateValue()
+
+            guard isMemoryOldEnough(createdAt: createdAt) else {
+                  print(
+                      "Notification skipped: Memory is less than 30 days old:",
+                      memoryID
+                  )
+                  return
+              }
 
             let lastNotified: Date?
 
@@ -318,8 +350,7 @@ final class LocationNotificationManager: NSObject,
             content.sound = .default
             content.userInfo = ["memoryID": memoryID]
 
-            // Unique request ID prevents multiple pending requests
-            // for the same memory.
+            
             let request = UNNotificationRequest(
                 identifier: "memory-\(memoryID)",
                 content: content,

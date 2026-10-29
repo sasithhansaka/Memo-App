@@ -238,6 +238,7 @@ final class AddMemoryViewModel: ObservableObject {
             && photosError == nil
            && locationError == nil
     }
+    
     func saveMemory() async {
         guard !isSaving else {
             return
@@ -283,5 +284,24 @@ final class AddMemoryViewModel: ObservableObject {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+    
+    func resetForm() {
+        title = ""
+        description = ""
+        category = ""
+        memoryDate = Date()
+        photos = []
+        selectedPhotoItems = []
+        ocrText = ""
+        photoOCRTexts = []
+        latitude = nil
+        longitude = nil
+        placeName = nil
+        titleError = nil
+        categoryError = nil
+        photosError = nil
+        locationError = nil
+        errorMessage = nil
     }
 }

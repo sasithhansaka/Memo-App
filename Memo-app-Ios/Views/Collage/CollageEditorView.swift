@@ -656,7 +656,7 @@ struct CollageEditorView: View {
                ).isEmpty {
                 Label(
                     location,
-                    systemImage: "mappin.and.ellipse"
+                    systemImage: "map"
                 )
                 .font(
                     MemoFont.dmSansRegular(11)
