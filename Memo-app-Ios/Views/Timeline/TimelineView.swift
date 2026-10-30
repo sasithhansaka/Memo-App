@@ -148,9 +148,15 @@ struct TimelineView: View {
                 Spacer()
             }
             .padding(.horizontal, 16)
+            
             VStack(spacing: 16) {
                 ForEach(memories) { memory in
-                    memoryFeedCard(memory)
+                    NavigationLink {
+                        MemoryDetailView(memory: memory)
+                    } label: {
+                        memoryFeedCard(memory)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
         }

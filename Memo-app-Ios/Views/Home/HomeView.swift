@@ -239,6 +239,8 @@ struct HomeView: View {
                 }
             }
         }
+    
+    
         private func collectionCard(
             title: String,
             count: Int,
