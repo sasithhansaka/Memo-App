@@ -108,7 +108,7 @@ struct HomeView: View {
                     .resizable()
                     .scaledToFill()
                     .frame(maxWidth: .infinity)
-                    .frame(height: 185)
+                    .frame(height: 200)
                     .clipped()
                     .clipShape(RoundedRectangle(cornerRadius: 5))
 

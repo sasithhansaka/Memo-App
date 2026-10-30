@@ -88,6 +88,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		D701D31530946BC100A46FCD /* docs */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = docs;
+			sourceTree = "<group>";
+		};
 		D7D8E734306E240A007CF230 /* Memo-app-Ios */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -146,6 +151,7 @@
 		D7D8E729306E240A007CF230 = {
 			isa = PBXGroup;
 			children = (
+				D701D31530946BC100A46FCD /* docs */,
 				D7FB565930906AC9004291DB /* MemoAppWidgetExtension.entitlements */,
 				D7D8E734306E240A007CF230 /* Memo-app-Ios */,
 				D7FB564330906A2B004291DB /* MemoAppWidget */,
@@ -192,6 +198,7 @@
 				D7FB565230906A2C004291DB /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				D701D31530946BC100A46FCD /* docs */,
 				D7D8E734306E240A007CF230 /* Memo-app-Ios */,
 			);
 			name = "Memo-app-Ios";
